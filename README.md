@@ -25,8 +25,7 @@ Go in [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/i
 
 ## Features 📘 (incoming)
 
-- As a user, I want to read articles
-- As an admin, I want to read, write and publish articles
+
 
 ## Main Libraries 📚 (incoming)
 
