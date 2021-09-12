@@ -20,6 +20,25 @@ services:
     networks:
       - backend
 
+  consumer:
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+    container_name: consumer
+    build:
+      context: ./
+      dockerfile: build/Dockerfile-consumer
+    ports:
+      - "9001:9000"
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_ERLANG_COOKIE: rabbitmq_cookie
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_PORT: 5672
+    networks:
+      - backend
+
   rabbitmq:
     hostname: rabbitmq
     image: rabbitmq:3-management-alpine
