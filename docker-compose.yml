@@ -1,0 +1,45 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: ./build/Dockerfile-app
+    environment:
+      API_PORT: "8080"
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_ERLANG_COOKIE: rabbitmq_cookie
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_PORT: 5672
+    depends_on:
+      - rabbitmq
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/go:rw
+    networks:
+      - backend
+
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:3-management-alpine
+    container_name: cqrs-rabbitmq
+    volumes:
+      - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_ERLANG_COOKIE: rabbitmq_cookie
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_PORT: 5672
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - backend
+    logging:
+      driver: none
+
+networks:
+  backend:
+    driver: "bridge"
