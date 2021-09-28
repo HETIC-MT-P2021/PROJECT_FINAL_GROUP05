@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/rabbit"
 	"log"
+
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/rabbit"
 )
 
 func main() {
@@ -15,4 +16,5 @@ func main() {
 	_ = rabbit.NewRabbitRepository(rabbit.RabbitChannel, rabbit.RabbitQueue)
 
 	log.Println("⚡️ app is running!")
+	bot()
 }
