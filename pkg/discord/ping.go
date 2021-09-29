@@ -1,8 +1,8 @@
-package main
+package discord
 
 // This function will be called (due to AddHandler above) every time a new
 // message is created on any channel that the authenticated bot has access to.
-func ping(Content string) string {
+func Ping(Content string) string {
 
 	if Content == "ping" || Content == "carlos" {
 		return "https://cdn.discordapp.com/attachments/694885042400264266/892463464591790190/carlos.jpg"

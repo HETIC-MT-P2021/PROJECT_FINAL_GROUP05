@@ -1,19 +1,19 @@
-package main
+package discord
 
-func discordcommandHandler(userID string, channelID string, content string) (string, bool) {
+func DiscordCommandHandler(userID string, channelID string, content string) (string, bool) {
 
 	switch content {
 	case "ping":
-		result := ping(content)
+		result := Ping(content)
 		return result, true
 	case "pong":
-		result := ping(content)
+		result := Ping(content)
 		return result, true
 	case "carlos":
-		result := ping(content)
+		result := Ping(content)
 		return result, true
 	case "contrecarlos":
-		result := ping(content)
+		result := Ping(content)
 		return result, true
 	default:
 		result := ""

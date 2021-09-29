@@ -1,4 +1,4 @@
-package main
+package discord
 
 import (
 	"flag"
@@ -21,7 +21,7 @@ func init() {
 	flag.Parse()
 }
 
-func carlosbot() {
+func CarlosBot() {
 	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New("Bot " + os.Getenv("REACT_APP_DISCORD_TOKEN"))
 	if err != nil {
@@ -30,7 +30,7 @@ func carlosbot() {
 	}
 
 	// Register the messageCreate func as a callback for MessageCreate events.
-	dg.AddHandler(messageCreate)
+	dg.AddHandler(MessageCreate)
 
 	// In this example, we only care about receiving message events.
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
@@ -52,14 +52,14 @@ func carlosbot() {
 	dg.Close()
 }
 
-func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
+func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Ignore all messages created by the bot itself
 	// This isn't required in this specific example but it's a good practice.
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
-	Message, status := discordcommandHandler(m.Author.ID, m.ChannelID, m.Content)
+	Message, status := DiscordCommandHandler(m.Author.ID, m.ChannelID, m.Content)
 	if status {
 		s.ChannelMessageSend(m.ChannelID, Message)
 	}
