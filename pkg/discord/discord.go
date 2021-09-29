@@ -40,9 +40,7 @@ func CarlosBot() (session *discordgo.Session, err error) {
 		return nil, err
 	}
 
-	// Wait here until CTRL-C or other term signal is received.
-
-	// Cleanly close down the Discord session.
+	//Returns the created session
 	return dg, nil
 }
 
