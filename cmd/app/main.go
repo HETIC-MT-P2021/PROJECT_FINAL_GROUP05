@@ -16,5 +16,5 @@ func main() {
 	_ = rabbit.NewRabbitRepository(rabbit.RabbitChannel, rabbit.RabbitQueue)
 
 	log.Println("⚡️ app is running!")
-	bot()
+	carlosbot()
 }
