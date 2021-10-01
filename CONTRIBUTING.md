@@ -26,7 +26,7 @@ Note that multiple commits often get squashed when they are landed.
 Commit message summaries must follow this basic format:
 
 ```
-Tag: Message
+Tag/Message
 ```
 
 `Tag` should not be confused with git tag. Message should not be confused with git commit message.
@@ -50,3 +50,20 @@ Build: Update Travis to only test Node 0.10 (refs #734)
 Fix: Semi rule incorrectly flagging extra semicolon (fixes #840)
 Upgrade: Esprima to 1.2, switch to using comment attachment (fixes #730)
 ```
+
+## Branch naming convention
+
+Branch naming must follow this basic format:
+
+```
+Tag/Name
+```
+
+The `Tag` is one of the following :
+
+* `Feat` - Implementation of a new feature
+* `Fix` - For a bug fix
+* `Update` - Update of an existing feature
+* `Clean` - For non-performance-impacting cleanups, such as removing unrelated comments
+* `Refacto` - Refactorisation of an existing feature
+* `Doc` - Addition or modification of the documentations
