@@ -10,6 +10,7 @@ import (
 	"time"
 
 	v1 "github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/cmd/v1"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/rabbit"
 	"github.com/gin-gonic/gin"
 )
@@ -17,6 +18,10 @@ import (
 func main() {
 	gin.ForceConsoleColor()
 	router := gin.Default()
+
+	if err := database.Connect(); err != nil {
+		log.Panic(err)
+	}
 
 	v1.ApplyRoutes(router)
 

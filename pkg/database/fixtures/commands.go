@@ -1,0 +1,27 @@
+package fixtures
+
+import (
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/commands"
+)
+
+// NewCommands Creates 2 commands
+func NewCommands() error {
+	audioCommand := commands.Command{
+		Title: "Extrait audio",
+		Command: "-audio -s X  -d Y -i 'input'",
+		IsChecked: false,
+	}
+
+	videoCommand := commands.Command{
+		Title: "Extrait vidéo",
+		Command: "-video -s X  -d Y -i 'input'",
+		IsChecked: false,
+	}
+
+	repo := commands.NewCommandsRepository(database.DbConn)
+	err := repo.CreateCommand(audioCommand)
+	err = repo.CreateCommand(videoCommand)
+
+	return err
+}
