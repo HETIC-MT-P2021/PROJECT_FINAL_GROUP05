@@ -1,10 +1,10 @@
 package command
 
 import (
+	"database/sql"
 	"net/http"
 
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/commands"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,7 +17,14 @@ import (
 // @Success 200 {string} string	"GET /commands"
 // @Router /commands [get]
 func GetCommands(c *gin.Context) {
-	repo := commands.NewCommandsRepository(database.DbConn)
+	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to retrieve Database connection",
+		})
+	}
+	
+	repo := mysql.NewCommandsRepository(dbConn)
 	commands, err := repo.GetCommands()
 
 	if err != nil {

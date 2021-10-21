@@ -15,7 +15,7 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/streadway/amqp v1.0.0
 	github.com/stretchr/testify v1.7.0
-	github.com/ugorji/go/codec v1.2.6 // indirect
+	github.com/ugorji/go v1.2.6 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 	golang.org/x/sys v0.0.0-20211001092434-39dca1131b70 // indirect
 	golang.org/x/text v0.3.7 // indirect

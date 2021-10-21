@@ -1,10 +1,11 @@
 package fixture
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/fixtures"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql/fixtures"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,7 +18,14 @@ import (
 // @Failure 500 {object} pkg.HTTPStatus "Not Created"
 // @Router /fixtures/commands [post]
 func CreateCommands(c *gin.Context) {
-	if err := fixtures.NewCommands(); err != nil {
+	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to retrieve Database connection",
+		})
+	}
+
+	if err := fixtures.NewCommands(dbConn); err != nil {
 		log.Println(err)
 		c.JSON(http.StatusServiceUnavailable, gin.H{
 			"status": "Not created",

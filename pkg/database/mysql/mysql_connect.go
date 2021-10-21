@@ -1,4 +1,4 @@
-package database
+package mysql
 
 import (
 	"database/sql"
@@ -6,13 +6,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/user"
 	"github.com/caarlos0/env"
 	_ "github.com/go-sql-driver/mysql"
-)
-
-var (
-	DbConn *sql.DB
 )
 
 const (
@@ -30,10 +25,10 @@ type Config struct {
 }
 
 // Connect connection to database
-func Connect() error {
+func Connect() (*sql.DB, error) {
 	cfg := Config{}
 	if err := env.Parse(&cfg); err != nil {
-		return fmt.Errorf("%+v", err)
+		return nil, fmt.Errorf("%+v", err)
 	}
 	dsn := cfg.DbUser + ":" + cfg.DbPassword + "@" + cfg.DbHost + "/" + cfg.
 		DbName + "?parseTime=true&charset=utf8"
@@ -41,7 +36,7 @@ func Connect() error {
 	db, err := sql.Open("mysql", dsn)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	for index := 1; index <= attemptsDBConnexion; index++ {
@@ -53,12 +48,9 @@ func Connect() error {
 			}
 			continue
 		} else {
-			DbConn = db
-			user.NewUserRepositoryImpl(DbConn)
+			return db, nil
 		}
-
-		break
 	}
 
-	return nil
+	return nil, nil
 }

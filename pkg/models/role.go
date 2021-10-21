@@ -1,4 +1,6 @@
-package user
+package models
+
+type Role uint8
 
 const (
 	OPERATOR     Role = 0x1

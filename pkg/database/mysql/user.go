@@ -1,11 +1,26 @@
-package user
+package mysql
 
 import (
+	"database/sql"
+
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP4/pkg/database/query"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 )
 
-// GetUserFromUsername method for retrieve user from bdd
-func (r *UserRepositoryImpl) GetUserFromUsername(username string) (*User, error) {
+// mysqlUserRepo struct for db connection
+type mysqlUserRepo struct {
+	DbConn *sql.DB
+}
+
+// NewUserRepositoryImpl creates new mysqlUserRepo
+func NewUserRepositoryImpl(dbConn *sql.DB) *mysqlUserRepo {
+	return &mysqlUserRepo{
+		DbConn: dbConn,
+	}
+}
+
+// GetUserFromUsername to retrieve user from bdd
+func (r *mysqlUserRepo) GetUserFromUsername(username string) (*models.User, error) {
 	var (
 		Email    string
 		Password string
@@ -23,18 +38,18 @@ func (r *UserRepositoryImpl) GetUserFromUsername(username string) (*User, error)
 		return nil, err
 	}
 
-	user := &User{
+	user := &models.User{
 		Username: username,
 		Email:    Email,
 		Password: Password,
-		Role:     Role(RoleInt),
+		Role:     models.Role(RoleInt),
 	}
 
 	return user, nil
 }
 
-// CreateAccount method for create an account with role operator
-func (r *UserRepositoryImpl) CreateAccount(userInput RequestRegister) (err error) {
+// CreateAccount to create an account with role operator
+func (r *mysqlUserRepo) CreateAccount(userInput models.RequestRegister) (err error) {
 	tx, err := r.DbConn.Begin()
 	if err != nil {
 		return err

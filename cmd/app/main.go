@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -9,8 +10,10 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP4/pkg/database"
 	v1 "github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/cmd/v1"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/rabbit"
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +21,12 @@ import (
 func main() {
 	gin.ForceConsoleColor()
 	router := gin.Default()
+	mysqlConnector, err := mysql.Connect()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	router.Use(pkg.ApiMiddleware(mysqlConnector))
 
 	if err := database.Connect(); err != nil {
 		log.Panic(err)
