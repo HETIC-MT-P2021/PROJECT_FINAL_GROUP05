@@ -1,7 +1,7 @@
 package jwt_auth
 
 import (
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/user"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP4/pkg/database/user"
 	"github.com/gin-gonic/gin"
 	jwt "github.com/kyfk/gin-jwt"
 	"golang.org/x/crypto/bcrypt"
