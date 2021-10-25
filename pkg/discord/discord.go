@@ -20,6 +20,7 @@ func init() {
 }
 
 func CarlosBot() (session *discordgo.Session, err error) {
+	fmt.Println(os.Getenv("REACT_APP_DISCORD_TOKEN"))
 	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New("Bot " + os.Getenv("REACT_APP_DISCORD_TOKEN"))
 	if err != nil {

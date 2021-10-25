@@ -1,5 +1,21 @@
 version: "3.8"
 services:
+  db:
+    image: mysql:8
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: goproject
+      MYSQL_PASSWORD: goproject
+      MYSQL_DATABASE: app
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      DB_HOST: tcp(db:3306)
+    networks:
+      - backend
+
   app:
     build:
       context: ./
@@ -11,6 +27,10 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
       RABBITMQ_PORT: 5672
+      MYSQL_USER: goproject
+      MYSQL_PASSWORD: goproject
+      MYSQL_DATABASE: app
+      DB_HOST: tcp(db:3306)
     depends_on:
       - rabbitmq
     ports:
@@ -22,25 +42,6 @@ services:
     env_file:
       - .env
       - .env.local
-
-  consumer:
-    depends_on:
-      - rabbitmq
-    restart: on-failure
-    container_name: consumer
-    build:
-      context: ./
-      dockerfile: build/Dockerfile-consumer
-    ports:
-      - "9001:9000"
-    environment:
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_ERLANG_COOKIE: rabbitmq_cookie
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-      RABBITMQ_PORT: 5672
-    networks:
-      - backend
 
   rabbitmq:
     hostname: rabbitmq
@@ -62,6 +63,24 @@ services:
     logging:
       driver: none
 
+  consumer:
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+    container_name: consumer
+    build:
+      context: ./
+      dockerfile: build/Dockerfile-consumer
+    ports:
+      - "9010:9000"
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_ERLANG_COOKIE: rabbitmq_cookie
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_PORT: 5672
+    networks:
+      - backend
 networks:
   backend:
     driver: "bridge"

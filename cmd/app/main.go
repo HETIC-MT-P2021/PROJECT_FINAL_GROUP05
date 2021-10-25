@@ -3,23 +3,50 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/rabbit"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	err := rabbit.ConnectToRabbitMQ()
+	gin.ForceConsoleColor()
+	router := gin.Default()
+	/*mysqlConnector, err := mysql.Connect()
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
 		return
 	}
+	router.Use(pkg.ApiMiddleware(mysqlConnector))
 
-	_ = rabbit.NewRabbitRepository(rabbit.RabbitChannel, rabbit.RabbitQueue)
+	if err := database.Connect(); err != nil {
+		log.Panic(err)
+	}
 
+	v1.ApplyRoutes(router)*/
+
+	router.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": "Not found",
+		})
+	})
+
+	srv := &http.Server{
+		Addr:    ":8080",
+		Handler: router,
+	}
+
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("listen: %s\n", err)
+		}
+	}()
+
+	rabbit.InitProducer()
 	log.Println("⚡️ Queue is running!")
 
 	session, err := discord.CarlosBot()
