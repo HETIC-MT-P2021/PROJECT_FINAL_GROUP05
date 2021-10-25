@@ -39,6 +39,9 @@ services:
       - ./:/go:rw
     networks:
       - backend
+    env_file:
+      - .env
+      - .env.local
 
   rabbitmq:
     hostname: rabbitmq
