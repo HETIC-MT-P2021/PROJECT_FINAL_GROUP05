@@ -5,7 +5,9 @@ import (
 	"net/http"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/download/ytb"
 	"github.com/gin-gonic/gin"
+	"github.com/kkdai/youtube/v2"
 )
 
 // GetCommands returns array of commands from database
@@ -34,4 +36,18 @@ func GetCommands(c *gin.Context) {
 	}
 	
 	c.JSON(http.StatusFound, commands)
+}
+
+func Download(c *gin.Context) {
+	downloadService := ytb.NewDownloadRepository(youtube.Client{})
+	err := downloadService.DownloadVideo("BaW_jenozKc");
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+	}
+
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "nice dl",
+	})
 }
