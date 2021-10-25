@@ -40,7 +40,7 @@ func GetCommands(c *gin.Context) {
 
 func Download(c *gin.Context) {
 	downloadService := ytb.NewDownloadRepository(youtube.Client{})
-	err := downloadService.DownloadVideo("BaW_jenozKc");
+	err := downloadService.DownloadVideo("9QI8PCylni4");
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,

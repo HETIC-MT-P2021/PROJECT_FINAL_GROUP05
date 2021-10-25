@@ -1,11 +1,16 @@
 package ytb
 
 import (
+	"fmt"
 	"io"
 	"os"
 
 	"github.com/kkdai/youtube/v2"
+	uuid "github.com/satori/go.uuid"
 )
+
+const DOCKER_CONTAINER_PATH = "go/downloads/"
+const VIDEO_QUALITY = "medium"
 
 type ytbDownloadRepo struct {
 	Client youtube.Client
@@ -18,19 +23,20 @@ func NewDownloadRepository(client youtube.Client) *ytbDownloadRepo {
 	}
 }
 
+// DownloadVideo and store into "downloads" folder
 func (dl *ytbDownloadRepo) DownloadVideo(videoID string) error {
 	video, err := dl.Client.GetVideo(videoID)
 	if err != nil {
 		return err
 	}
 
-	formats := video.Formats.WithAudioChannels() // only get videos with audio
+	formats := video.Formats.Quality(VIDEO_QUALITY).WithAudioChannels()
 	stream, _, err := dl.Client.GetStream(video, &formats[0])
 	if err != nil {
 		return err
 	}
 
-	file, err := os.Create("go/downloads/video.mp4")
+	file, err := os.Create(fmt.Sprintf("%s%s.mp4", DOCKER_CONTAINER_PATH, uuid.NewV4().String()))
 	if err != nil {
 		return err
 	}
