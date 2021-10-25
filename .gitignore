@@ -17,3 +17,5 @@
 
 # Local environment variables
 .env.local
+
+downloads
