@@ -1,5 +1,9 @@
 # Bot Discord - Carlos
 
+## Prerequisite
+
+- Golang v1.16
+
 ## Where am I ? 💡
 
 This bot allows users in discord servers, edit and share medias from videos to audios
@@ -24,8 +28,6 @@ $ swag init -g cmd/app/main.go
 Go in [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html) to see API doc
 
 ## Features 📘 (incoming)
-
-
 
 ## Main Libraries 📚 (incoming)
 

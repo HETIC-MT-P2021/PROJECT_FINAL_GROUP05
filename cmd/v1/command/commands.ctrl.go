@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/download/ytb"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/media_download/video/ytb"
 	"github.com/gin-gonic/gin"
 	"github.com/kkdai/youtube/v2"
 )
@@ -40,7 +40,7 @@ func GetCommands(c *gin.Context) {
 
 func Download(c *gin.Context) {
 	downloadService := ytb.NewDownloadRepository(youtube.Client{})
-	err := downloadService.DownloadVideo("9QI8PCylni4");
+	err := downloadService.Download("9QI8PCylni4");
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
