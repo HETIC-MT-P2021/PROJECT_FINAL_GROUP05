@@ -19,6 +19,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/satori/go.uuid v1.2.0
+	github.com/u2takey/ffmpeg-go v0.3.0
 	github.com/ugorji/go v1.2.6 // indirect
 	golang.org/x/net v0.0.0-20211020060615-d418f374d309 // indirect
 	golang.org/x/sys v0.0.0-20211025112917-711f33c9992c // indirect

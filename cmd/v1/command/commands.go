@@ -8,4 +8,5 @@ import (
 func ApplyRoutes(r *gin.RouterGroup) {
 	r.GET("/commands", GetCommands)
 	r.GET("/commands/dl", Download)
+	r.GET("/commands/exec", Execute)
 }
