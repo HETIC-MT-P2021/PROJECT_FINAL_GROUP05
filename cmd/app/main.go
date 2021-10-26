@@ -10,10 +10,10 @@ import (
 
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP4/pkg/database"
 	v1 "github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/cmd/v1"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/rabbit"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,7 +25,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	router.Use(pkg.ApiMiddleware(mysqlConnector))
+	router.Use(utils.ApiMiddleware(mysqlConnector))
 
 	if err := database.Connect(); err != nil {
 		log.Panic(err)

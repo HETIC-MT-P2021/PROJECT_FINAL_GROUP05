@@ -1,4 +1,4 @@
-package pkg
+package utils
 
 type HTTPError struct {
 	Status   	int
