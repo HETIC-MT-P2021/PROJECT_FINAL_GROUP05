@@ -1,6 +1,6 @@
 package rabbit
 
-type RabbitRepository interface {
+type MessageBrokerRepository interface {
 	Publish(string) error
 	Consume()
 }

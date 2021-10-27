@@ -1,24 +1,26 @@
-package rabbit
+package producers
 
 import (
 	"encoding/json"
 	"log"
 	"time"
+
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit"
 )
 
-func InitProducer() {
-	err := ConnectToRabbitMQ()
+func DownloadProducer() {
+	err, channel, queue := rabbit.ConnectToRabbitMQ(rabbit.DOWLOAD_QUEUE_NAME)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	rabbitImpl := NewRabbitRepository(RabbitChannel, RabbitQueue)
+	rabbitImpl := rabbit.NewRabbitRepository(channel, queue)
 	
-	message := QueueMessage{
+	message := rabbit.QueueMessage{
 		Type: "audio",
 		MediaLink: "youtube.com",
-		Options: 	Options{
+		Options: 	rabbit.Options{
 			StartInSeconds: "10",
 			DurationInSeconds: "10",
 		},

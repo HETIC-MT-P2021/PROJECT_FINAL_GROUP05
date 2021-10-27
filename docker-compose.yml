@@ -63,14 +63,14 @@ services:
     logging:
       driver: none
 
-  consumer:
+  download:
     depends_on:
       - rabbitmq
     restart: on-failure
-    container_name: consumer
+    container_name: download
     build:
       context: ./
-      dockerfile: build/Dockerfile-consumer
+      dockerfile: build/Dockerfile-download
     ports:
       - "9010:9000"
     environment:

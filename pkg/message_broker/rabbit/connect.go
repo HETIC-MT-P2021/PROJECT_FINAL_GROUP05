@@ -8,21 +8,6 @@ import (
 	"github.com/streadway/amqp"
 )
 
-var RabbitChannel *amqp.Channel
-var RabbitQueue amqp.Queue
-
-type RabbitRepositoryImpl struct {
-	Chan  *amqp.Channel
-	Queue amqp.Queue
-}
-
-func NewRabbitRepository(channel *amqp.Channel, queue amqp.Queue) *RabbitRepositoryImpl {
-	return &RabbitRepositoryImpl{
-		Chan: channel,
-		Queue: queue,
-	}
-}
-
 // rabbitMqEnv contains rabbitmq env credentials
 type rabbitMqEnv struct {
 	RabbitMqHost string `env:"RABBITMQ_HOST"`
@@ -34,16 +19,18 @@ type rabbitMqEnv struct {
 const (
 	numberOftries       = 10
 	timeToWaitInSeconds = 5
+	AMQP_PROTOCOL 			= "amqp"
 )
 
 // ConnectToRabbitMQ is for connecting to rabbitmq
-func ConnectToRabbitMQ() error {
+func ConnectToRabbitMQ(queueName string) (error, *amqp.Channel, amqp.Queue) {
 	cfg := rabbitMqEnv{}
 	if err := env.Parse(&cfg); err != nil {
-		return err
+		return err, nil, amqp.Queue{}
 	}
 
-	urlConn := fmt.Sprintf("amqp://%s:%s@%s:%s/",
+	urlConn := fmt.Sprintf("%s://%s:%s@%s:%s/",
+		AMQP_PROTOCOL,
 		cfg.RabbitMqPass,
 		cfg.RabbitMqUser,
 		cfg.RabbitMqHost,
@@ -62,11 +49,11 @@ func ConnectToRabbitMQ() error {
 
 	ch, err := rabbitConnection.Channel()
 	if err != nil {
-		return err
+		return err, nil, amqp.Queue{}
 	}
 
 	q, err := ch.QueueDeclare(
-		"event",
+		queueName,
 		false,
 		false,
 		false,
@@ -74,11 +61,8 @@ func ConnectToRabbitMQ() error {
 		nil,
 	)
 	if err != nil {
-		return err
+		return err, nil, amqp.Queue{}
 	}
 
-	RabbitChannel = ch
-	RabbitQueue = q
-
-	return nil
+	return nil, ch, q
 }
