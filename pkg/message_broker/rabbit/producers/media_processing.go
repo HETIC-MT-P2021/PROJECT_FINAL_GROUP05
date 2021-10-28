@@ -9,7 +9,7 @@ import (
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 )
 
-func MediaProcessingProducer(message models.MediaProcessingMessage) {
+func MediaProcessingProducer(message models.MediaProcessingQueueMessage) {
 	err, channel, queue := rabbit.ConnectToRabbitMQ(rabbit.MEDIA_PROCESSING_QUEUE_NAME)
 	if err != nil {
 		log.Println(err)

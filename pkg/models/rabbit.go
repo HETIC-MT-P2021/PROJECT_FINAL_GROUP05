@@ -1,12 +1,12 @@
 package models
 
-type DownloadMessage struct {
+type DownloadQueueMessage struct {
 	Type 			string      `json:"type"`
 	MediaLink string 			`json:"media_link"`
 	Options 	Options 		`json:"options"`
 }
 
-type MediaProcessingMessage struct {
+type MediaProcessingQueueMessage struct {
 	FileName 	string      `json:"file_name"`
 	Options 	Options 		`json:"options"`
 }

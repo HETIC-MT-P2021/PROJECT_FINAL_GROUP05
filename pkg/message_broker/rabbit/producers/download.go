@@ -9,7 +9,7 @@ import (
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 )
 
-func DownloadProducer(message models.DownloadMessage) {
+func DownloadProducer(message models.DownloadQueueMessage) {
 	err, channel, queue := rabbit.ConnectToRabbitMQ(rabbit.DOWLOAD_QUEUE_NAME)
 	if err != nil {
 		log.Println(err)

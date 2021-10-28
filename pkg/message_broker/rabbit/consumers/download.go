@@ -14,7 +14,7 @@ func DownloadConsumer() {
 		return
 	}
 
-	message := models.MediaProcessingMessage{
+	message := models.MediaProcessingQueueMessage{
 		FileName: "13.mp4",
 	}
 

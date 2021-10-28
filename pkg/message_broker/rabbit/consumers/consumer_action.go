@@ -9,11 +9,11 @@ import (
 )
 
 type CallMediaProcessingProducer struct {
-	MediaProcessingMessage models.MediaProcessingMessage
+	MediaProcessingMessage models.MediaProcessingQueueMessage
 	Body []byte
 }
 
-func NewCallMediaProcessingProducer(message models.MediaProcessingMessage) *CallMediaProcessingProducer {
+func NewCallMediaProcessingProducer(message models.MediaProcessingQueueMessage) *CallMediaProcessingProducer {
 	return &CallMediaProcessingProducer{
 		MediaProcessingMessage: message,
 	}
@@ -24,7 +24,7 @@ func (producer *CallMediaProcessingProducer) SetBody(body []byte) {
 }
 
 func (producer *CallMediaProcessingProducer) Execute() error {
-	var downloadMessage *models.DownloadMessage
+	var downloadMessage *models.DownloadQueueMessage
 	err := json.Unmarshal(producer.Body, &downloadMessage)
 	if err != nil {
 		return err
