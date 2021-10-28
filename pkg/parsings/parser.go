@@ -15,22 +15,28 @@ var (
 	inputUriParam          string
 )
 
+const (
+	RegexFindType   = `^([\w\-]+)`
+	RegexFindParams      = `(?m)-. ([^\s]+)`
+	RegexFindParamsValue = `(?m)(?P<value> (.*?)$)`
+)
+
 func getTypeFromString(input string) string {
-	typeRegex := regexp.MustCompile(`^([\w\-]+)`)
+	typeRegex := regexp.MustCompile(RegexFindType)
 	mediaType = typeRegex.FindString(input)
 	return mediaType
 }
 
 func getParamsFromString(input string) []string {
-	var re = regexp.MustCompile(`(?m)-. ([^\s]+)`)
-	return re.FindAllString(input, -1)
+	var regexParams = regexp.MustCompile(RegexFindParams)
+	return regexParams.FindAllString(input, -1)
 }
 
 func getOptionsFromString(input string) models.Options {
 	var params = getParamsFromString(input)
 	var options models.Options
 
-	reValue := regexp.MustCompile(`(?m)(?P<value> (.*?)$)`)
+	reValue := regexp.MustCompile(RegexFindParamsValue)
 
 	for _, match := range params {
 		var value = strings.ReplaceAll(reValue.FindString(match), " ", "")
