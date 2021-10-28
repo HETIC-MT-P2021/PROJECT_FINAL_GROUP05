@@ -69,7 +69,7 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
-	Message, status := DiscordCommandHandler(m.Author.ID, m.ChannelID, m.Content)
+	Message, status := CommandHandler(m.Author.ID, m.ChannelID, m.Content)
 	if status {
 		s.ChannelMessageSend(m.ChannelID, Message)
 	}
