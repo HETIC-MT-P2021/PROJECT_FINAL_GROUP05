@@ -6,9 +6,10 @@ import (
 	"time"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 )
 
-func MediaProcessingProducer() {
+func MediaProcessingProducer(message models.MediaProcessingMessage) {
 	err, channel, queue := rabbit.ConnectToRabbitMQ(rabbit.MEDIA_PROCESSING_QUEUE_NAME)
 	if err != nil {
 		log.Println(err)
@@ -16,15 +17,6 @@ func MediaProcessingProducer() {
 	}
 
 	rabbitImpl := rabbit.NewRabbitRepository(channel, queue)
-	
-	message := rabbit.QueueMessage{
-		Type: "audio",
-		MediaLink: "youtube.com",
-		Options: 	rabbit.Options{
-			StartInSeconds: "10",
-			DurationInSeconds: "10",
-		},
-	}
 	buffer, err := json.Marshal(message)
 	if err != nil {
 		return

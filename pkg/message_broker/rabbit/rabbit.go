@@ -34,7 +34,7 @@ func (rabbit *rabbitRepository) Publish(message string) error {
 }
 
 // Consume Receives message and make process
-func (rabbit *rabbitRepository) Consume() {
+func (rabbit *rabbitRepository) Consume(action ConsumerAction) {
 	msgs, err := rabbit.Chan.Consume(
 		rabbit.Queue.Name, // queue
 		"",
@@ -55,7 +55,10 @@ func (rabbit *rabbitRepository) Consume() {
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
-			// make process
+
+			if action != nil {
+				action.Execute(d.Body)
+			}
 		}
 	}()
 

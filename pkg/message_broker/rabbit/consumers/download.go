@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 )
 
 func DownloadConsumer() {
@@ -13,6 +14,12 @@ func DownloadConsumer() {
 		return
 	}
 
+	message := models.MediaProcessingMessage{
+		FileName: "13.mp4",
+	}
+
+	action := NewCallMediaProcessingProducer(message)
+
 	rabbitImpl := rabbit.NewRabbitRepository(chanel, queue)
-	rabbitImpl.Consume()
+	rabbitImpl.Consume(action)
 }

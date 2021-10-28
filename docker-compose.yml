@@ -81,6 +81,25 @@ services:
       RABBITMQ_PORT: 5672
     networks:
       - backend
+
+  media:
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+    container_name: media-processing
+    build:
+      context: ./
+      dockerfile: build/Dockerfile-media-processing
+    ports:
+      - "9011:9000"
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_ERLANG_COOKIE: rabbitmq_cookie
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_PORT: 5672
+    networks:
+      - backend
 networks:
   backend:
     driver: "bridge"

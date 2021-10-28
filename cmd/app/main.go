@@ -8,11 +8,11 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/HETIC-MT-P2021/CQRSES_GROUP4/pkg/database"
 	v1 "github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/cmd/v1"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/producers"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -26,10 +26,6 @@ func main() {
 		return
 	}
 	router.Use(utils.ApiMiddleware(mysqlConnector))
-
-	if err := database.Connect(); err != nil {
-		log.Panic(err)
-	}
 
 	v1.ApplyRoutes(router)
 
@@ -50,7 +46,15 @@ func main() {
 		}
 	}()
 
-	producers.DownloadProducer()
+	message := models.DownloadMessage{
+		Type: "audio",
+		MediaLink: "youtube.com",
+		Options: 	models.Options{
+			StartInSeconds: "20",
+			DurationInSeconds: "35",
+		},
+	}
+	producers.DownloadProducer(message)
 	
 	log.Println("⚡️ Queue is running!")
 
