@@ -3,7 +3,10 @@ package discord
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -14,9 +17,23 @@ var (
 )
 
 func init() {
-
 	flag.StringVar(&Token, "t", "", "Bot Token")
 	flag.Parse()
+}
+
+func InitCarlosBot() error {
+	session, err := CarlosBot()
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Carlos has now started properly. Press Ctrl+C to shutdown.")
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
+	<-stop
+	log.Println("Gracefully shutdowning")
+	session.Close()
+	return nil
 }
 
 func CarlosBot() (session *discordgo.Session, err error) {

@@ -6,8 +6,20 @@ import (
 	"github.com/streadway/amqp"
 )
 
+type rabbitRepository struct {
+	Chan  *amqp.Channel
+	Queue amqp.Queue
+}
+
+func NewRabbitRepository(channel *amqp.Channel, queue amqp.Queue) *rabbitRepository {
+	return &rabbitRepository{
+		Chan: channel,
+		Queue: queue,
+	}
+}
+
 // Publish new message on rabbitmq
-func (rabbit *RabbitRepositoryImpl) Publish(message string) error {
+func (rabbit *rabbitRepository) Publish(message string) error {
 	err := rabbit.Chan.Publish(
 		"",
 		rabbit.Queue.Name, // routing key
@@ -22,7 +34,7 @@ func (rabbit *RabbitRepositoryImpl) Publish(message string) error {
 }
 
 // Consume Receives message and make process
-func (rabbit *RabbitRepositoryImpl) Consume() {
+func (rabbit *rabbitRepository) Consume(action ConsumerAction) {
 	msgs, err := rabbit.Chan.Consume(
 		rabbit.Queue.Name, // queue
 		"",
@@ -43,7 +55,11 @@ func (rabbit *RabbitRepositoryImpl) Consume() {
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
-			// make process
+
+			if action != nil {
+				action.SetBody(d.Body)
+				action.Execute()
+			}
 		}
 	}()
 
