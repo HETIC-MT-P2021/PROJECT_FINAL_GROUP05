@@ -15,3 +15,8 @@ type Options struct {
 	StartInSeconds			string 			`json:"start"`
 	DurationInSeconds 	string 			`json:"duration"`
 }
+
+type JobCheckerMessage struct {
+	DiscordMessageID string
+	MediaURL string
+}

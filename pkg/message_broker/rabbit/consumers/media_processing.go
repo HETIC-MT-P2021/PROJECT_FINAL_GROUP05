@@ -14,6 +14,8 @@ func MediaProcessingConsumer() {
 		return
 	}
 
+	action := NewMediaProcessingAction()
+
 	rabbitImpl := rabbit.NewRabbitRepository(chanel, queue)
-	rabbitImpl.Consume(nil)
+	rabbitImpl.Consume(action)
 }

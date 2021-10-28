@@ -57,7 +57,8 @@ func (rabbit *rabbitRepository) Consume(action ConsumerAction) {
 			log.Printf("Received a message: %s", d.Body)
 
 			if action != nil {
-				action.Execute(d.Body)
+				action.SetBody(d.Body)
+				action.Execute()
 			}
 		}
 	}()

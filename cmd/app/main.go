@@ -16,7 +16,7 @@ func main() {
 		log.Println(err)
 		return
 	}
-	
+
 	utils.InitServer(router)
 
 	message := models.DownloadMessage{

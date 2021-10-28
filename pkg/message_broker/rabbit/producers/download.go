@@ -14,7 +14,6 @@ func DownloadProducer(message models.DownloadMessage) {
 	if err != nil {
 		log.Println(err)
 		return
-	
 	}
 
 	rabbitImpl := rabbit.NewRabbitRepository(channel, queue)
