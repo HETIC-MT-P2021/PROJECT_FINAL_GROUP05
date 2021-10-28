@@ -1,22 +1,23 @@
 package discord
 
-func DiscordCommandHandler(userID string, channelID string, content string) (string, bool) {
+import (
+	"fmt"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/parsings"
+	"log"
+)
 
-	switch content {
-	case "ping":
-		result := Ping(content)
-		return result, true
-	case "pong":
-		result := Ping(content)
-		return result, true
-	case "carlos":
-		result := Ping(content)
-		return result, true
-	case "contrecarlos":
-		result := Ping(content)
-		return result, true
-	default:
-		result := ""
-		return result, false
-	}
+var (
+	message parsings.QueueMessage
+)
+
+func CommandHandler(userID string, channelID string, content string) (string, bool) {
+	log.Println(userID)
+	log.Println(channelID)
+	log.Println(content)
+
+	message = parsings.ParseCommand(content)
+	fmt.Println(message)
+
+	result := fmt.Sprintf("%#v", message)
+	return result, true
 }

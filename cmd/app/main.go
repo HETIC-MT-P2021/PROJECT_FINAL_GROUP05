@@ -51,9 +51,11 @@ func main() {
 	}()
 
 	rabbit.InitProducer()
+
 	log.Println("⚡️ Queue is running!")
 
 	session, err := discord.CarlosBot()
+
 	if err != nil {
 		log.Println(err)
 		return

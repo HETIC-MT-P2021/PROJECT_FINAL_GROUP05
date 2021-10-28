@@ -8,20 +8,17 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// Variables used for command line parameters
+// Token Variables used for command line parameters
 var (
 	Token string
 )
 
 func init() {
-
 	flag.StringVar(&Token, "t", "", "Bot Token")
 	flag.Parse()
 }
 
 func CarlosBot() (session *discordgo.Session, err error) {
-	fmt.Println(os.Getenv("REACT_APP_DISCORD_TOKEN"))
-	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New("Bot " + os.Getenv("REACT_APP_DISCORD_TOKEN"))
 	if err != nil {
 		fmt.Println("error creating Discord session,", err)
@@ -46,13 +43,11 @@ func CarlosBot() (session *discordgo.Session, err error) {
 }
 
 func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-
-	// Ignore all messages created by the bot itself
-	// This isn't required in this specific example but it's a good practice.
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
-	Message, status := DiscordCommandHandler(m.Author.ID, m.ChannelID, m.Content)
+
+	Message, status := CommandHandler(m.Author.ID, m.ChannelID, m.Content)
 	if status {
 		s.ChannelMessageSend(m.ChannelID, Message)
 	}

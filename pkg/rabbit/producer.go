@@ -14,12 +14,12 @@ func InitProducer() {
 	}
 
 	rabbitImpl := NewRabbitRepository(RabbitChannel, RabbitQueue)
-	
+
 	message := QueueMessage{
-		Type: "audio",
+		Type:      "audio",
 		MediaLink: "youtube.com",
-		Options: 	Options{
-			StartInSeconds: "10",
+		Options: Options{
+			StartInSeconds:    "10",
 			DurationInSeconds: "10",
 		},
 	}
@@ -28,7 +28,7 @@ func InitProducer() {
 		return
 	}
 
-  time.Sleep(10 * time.Second) // 10s to be sure rabbit is ready
+	time.Sleep(10 * time.Second) // 10s to be sure rabbit is ready
 
 	rabbitImpl.Publish(string(buffer))
 }
