@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/media_download/video/ytb"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/producers"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
+	"github.com/kkdai/youtube/v2"
 )
 
 type CallMediaProcessingProducer struct {
@@ -13,10 +15,8 @@ type CallMediaProcessingProducer struct {
 	Body []byte
 }
 
-func NewCallMediaProcessingProducer(message models.MediaProcessingQueueMessage) *CallMediaProcessingProducer {
-	return &CallMediaProcessingProducer{
-		MediaProcessingMessage: message,
-	}
+func NewCallMediaProcessingProducer() *CallMediaProcessingProducer {
+	return &CallMediaProcessingProducer{}
 }
 
 func (producer *CallMediaProcessingProducer) SetBody(body []byte) {
@@ -30,8 +30,17 @@ func (producer *CallMediaProcessingProducer) Execute() error {
 		return err
 	}
 
-	message := producer.MediaProcessingMessage
-	message.Options = downloadMessage.Options
+	download := ytb.NewDownloadRepository(youtube.Client{})
+	err, fileName := download.Download(downloadMessage.MediaLink)
+	if err != nil {
+		return err
+	}
+
+	message := models.MediaProcessingQueueMessage{
+		FileName: fileName,
+		Options: downloadMessage.Options,
+	}
+
 	producers.MediaProcessingProducer(message)
 
 	return nil
