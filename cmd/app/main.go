@@ -17,7 +17,7 @@ func main() {
 
 	utils.InitServer(router)
 
-	err = discord.InitCarlosBot()
+	_, err = discord.InitCarlosBot()
 	if err != nil {
 		log.Println(err)
 		return

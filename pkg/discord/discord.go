@@ -21,10 +21,10 @@ func init() {
 	flag.Parse()
 }
 
-func InitCarlosBot() error {
+func InitCarlosBot() (*discordgo.Session, error) {
 	session, err := CarlosBot()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	fmt.Println("Carlos has now started properly. Press Ctrl+C to shutdown.")
@@ -33,11 +33,10 @@ func InitCarlosBot() error {
 	<-stop
 	log.Println("Gracefully shutdowning")
 	session.Close()
-	return nil
+	return session, nil
 }
 
 func CarlosBot() (session *discordgo.Session, err error) {
-	fmt.Println(os.Getenv("REACT_APP_DISCORD_TOKEN"))
 	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New("Bot " + os.Getenv("REACT_APP_DISCORD_TOKEN"))
 	if err != nil {
@@ -69,8 +68,8 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
-	Message, status := CommandHandler(m.Author.ID, m.ChannelID, m.Content)
-	if status {
-		s.ChannelMessageSend(m.ChannelID, Message)
+	err := CommandHandler(s, m.Author.ID, m.ChannelID, m.Content)
+	if err != nil {
+		log.Println(err)
 	}
 }

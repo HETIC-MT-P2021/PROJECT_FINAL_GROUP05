@@ -3,7 +3,6 @@ module github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05
 go 1.16
 
 require (
-	github.com/HETIC-MT-P2021/CQRSES_GROUP4 v0.0.0-20210602145136-c86e3d938556
 	github.com/bwmarrin/discordgo v0.23.2
 	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/gin-gonic/gin v1.7.4

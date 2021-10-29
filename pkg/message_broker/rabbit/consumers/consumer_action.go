@@ -3,11 +3,14 @@ package consumers
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/commands/video/ffmpeg"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/media_download/video/ytb"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/producers"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
+	"github.com/bwmarrin/discordgo"
 	"github.com/kkdai/youtube/v2"
 )
 
@@ -39,6 +42,7 @@ func (producer *CallMediaProcessingProducer) Execute() error {
 	message := models.MediaProcessingQueueMessage{
 		FileName: fileName,
 		Options: downloadMessage.Options,
+		DiscordInfo: downloadMessage.DiscordInfo,
 	}
 
 	producers.MediaProcessingProducer(message)
@@ -66,10 +70,54 @@ func (producer *MediaProcessingAction) Execute() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("Here is discord message update")
-	return nil
+
+	dg, err := discordgo.New("Bot " + os.Getenv("REACT_APP_DISCORD_TOKEN"))
+	if err != nil {
+		fmt.Println("error creating Discord session,", err)
+		return err
+	}
+
+	err = dg.Open()
+	if err != nil {
+		fmt.Println("error opening connection,", err)
+		return err
+	}
+
+	updateDiscordMessage := models.DiscordSession{
+		Session: dg,
+		ChannelID: processingMessage.DiscordInfo.ChannelID,
+		MessageID: processingMessage.DiscordInfo.MessageID,
+	}
+
+	discord.UpdateMessage(updateDiscordMessage, processingMessage.FileName)
+	return err
 }
 
 func (producer *MediaProcessingAction) SetBody(body []byte) {
+	producer.Body = body
+}
+
+type JobCheckerAction struct {
+	DiscordSession *discordgo.Session
+	Body []byte
+}
+
+func NewJobCheckerAction(session *discordgo.Session) *JobCheckerAction {
+	return &JobCheckerAction{
+		DiscordSession: session,
+	}
+}
+
+func (producer *JobCheckerAction) Execute() error {
+	var jobCheckerMessage *models.JobCheckerQueueMessage
+	err := json.Unmarshal(producer.Body, &jobCheckerMessage)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (producer *JobCheckerAction) SetBody(body []byte) {
 	producer.Body = body
 }
