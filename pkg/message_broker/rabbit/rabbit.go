@@ -58,7 +58,10 @@ func (rabbit *rabbitRepository) Consume(action ConsumerAction) {
 
 			if action != nil {
 				action.SetBody(d.Body)
-				action.Execute()
+				err := action.Execute()
+				if err != nil {
+					log.Println(err)
+				}
 			}
 		}
 	}()
