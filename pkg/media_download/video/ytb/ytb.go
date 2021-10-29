@@ -1,7 +1,7 @@
 package ytb
 
 import (
-	"strings"
+	"regexp"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/kkdai/youtube/v2"
@@ -35,9 +35,17 @@ func (dl *ytbDownloadRepo) Download(youtubeURL string) (error, string) {
 	return utils.CreateMedia("mp4", stream) 
 }
 
-const YOUTUBE_PATTERN_URL = "https://www.youtube.com/watch?v="
+const (
+	DefaultYoutubeURL = `^https:\/\/www.youtube\.com\/watch\?v=`
+	SharedYoutubeURL = `^https:\/\/youtu\.be\/`
+)
 
-// getVideoID looking for ?v=id on youtube url
+// getVideoID looking for DefaultYoutubeURL or SharedYoutubeURL on youtube url
 func (dl *ytbDownloadRepo) getVideoID(youtubeURL string) string {
-	return strings.Replace(youtubeURL, YOUTUBE_PATTERN_URL, "", -1)
+	defaultUrl := regexp.MustCompile(DefaultYoutubeURL)
+	sharedUrl := regexp.MustCompile(DefaultYoutubeURL)
+
+	videoID := defaultUrl.ReplaceAll([]byte(youtubeURL), []byte(""))
+	videoID = sharedUrl.ReplaceAll(videoID, []byte(""))
+	return string(videoID)
 }
