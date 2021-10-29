@@ -1,10 +1,11 @@
 package parsings
 
 import (
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 )
 
 var (
@@ -56,8 +57,8 @@ func getOptionsFromString(input string) models.Options {
 		}
 	}
 
-	options.DurationInSeconds = startParamInSeconds
-	options.StartInSeconds = durationParamInSeconds
+	options.DurationInSeconds = durationParamInSeconds
+	options.StartInSeconds = startParamInSeconds
 	return options
 }
 
