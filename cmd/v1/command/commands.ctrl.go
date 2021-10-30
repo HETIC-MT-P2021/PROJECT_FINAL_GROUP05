@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,4 +35,38 @@ func GetCommands(c *gin.Context) {
 	}
 	
 	c.JSON(http.StatusFound, commands)
+}
+
+// UpdateCommand from database
+// @Summary update command from database
+// @Tags commands
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string	"GET /commands"
+// @Router /commands/{id} [PUT]
+func UpdateCommand(c *gin.Context) {
+	commandID := c.Param("id")
+
+	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to retrieve Database connection",
+		})
+	}
+
+	var req models.Command
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	
+	repo := mysql.NewCommandRepository(dbConn)
+	err := repo.UpdateCommand(commandID, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+	}
+	
+	c.JSON(http.StatusFound, req)
 }

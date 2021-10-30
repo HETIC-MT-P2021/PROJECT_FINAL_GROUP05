@@ -62,7 +62,27 @@ func (db *mysqlCommandRepo) GetCommands() ([]models.Command, error) {
 			return []models.Command{}, err
 		}
 		commands = append(commands, cmd)
-}
+	}
 
 	return commands, nil
+}
+
+// UpdateCommand to update command info from bdd
+func (db *mysqlCommandRepo) UpdateCommand(commandID string, command models.Command) error {
+	stmt, err := db.Conn.Prepare(query.QUERY_UPDATE_COMMAND)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(
+		command.Title,
+		command.Command,
+		command.IsActive,
+		command.ServerID,
+		commandID); err != nil {
+		return err
+	}
+
+	return nil
 }
