@@ -86,3 +86,18 @@ func (db *mysqlCommandRepo) UpdateCommand(commandID string, command models.Comma
 
 	return nil
 }
+
+// UpdateIsActiveFieldCommand to update command field called is_active from bdd
+func (db *mysqlCommandRepo) UpdateIsActiveFieldCommand(commandID string, isActive bool) error {
+	stmt, err := db.Conn.Prepare(query.QUERY_UPDATE_FIELD_IS_ACTIVE_COMMAND)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(isActive, commandID); err != nil {
+		return err
+	}
+
+	return nil
+}

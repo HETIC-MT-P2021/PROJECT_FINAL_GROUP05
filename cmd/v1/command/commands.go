@@ -8,4 +8,5 @@ import (
 func ApplyRoutes(r *gin.RouterGroup) {
 	r.GET("/commands", GetCommands)
 	r.PUT("/commands/:id", UpdateCommand)
+	r.PATCH("/commands/:id", UpdateIsActiveCommand)
 }

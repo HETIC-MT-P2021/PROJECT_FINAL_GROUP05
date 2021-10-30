@@ -13,4 +13,9 @@ const (
 		SET title = ?, command = ?, is_active = ?, server_id = ?
 		WHERE id = ?;
 	`
+	QUERY_UPDATE_FIELD_IS_ACTIVE_COMMAND string = `
+		UPDATE command 
+		SET is_active = ?
+		WHERE id = ?;
+	`
 )

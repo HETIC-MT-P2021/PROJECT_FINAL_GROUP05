@@ -68,5 +68,41 @@ func UpdateCommand(c *gin.Context) {
 		})
 	}
 	
-	c.JSON(http.StatusFound, req)
+	c.JSON(http.StatusOK, req)
+}
+
+// UpdateIsActiveCommand from database
+// @Summary update is_active field on a command from database
+// @Tags commands
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string	"GET /commands"
+// @Router /commands/{id} [PATCH]
+func UpdateIsActiveCommand(c *gin.Context) {
+	commandID := c.Param("id")
+
+	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to retrieve Database connection",
+		})
+	}
+
+	var req models.Command
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	
+	repo := mysql.NewCommandRepository(dbConn)
+	err := repo.UpdateIsActiveFieldCommand(commandID, req.IsActive)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+	}
+	
+	c.JSON(http.StatusOK, gin.H{
+		"is_active": req.IsActive,
+	})
 }

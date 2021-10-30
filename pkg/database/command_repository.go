@@ -7,4 +7,5 @@ type commandRepository interface {
 	CreateCommand(command models.Command) error
 	GetCommands() ([]models.Command, error)
 	UpdateCommand(commandID string, command models.Command) error
+	UpdateIsActiveFieldCommand(commandID string, isActive bool) error
 }
