@@ -8,8 +8,8 @@ import (
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 )
 
-func MediaProcessingProducer(message models.MediaProcessingQueueMessage) {
-	err, channel, queue := rabbit.ConnectToRabbitMQ(rabbit.MEDIA_PROCESSING_QUEUE_NAME)
+func JobCheckerProducer(message models.JobCheckerQueueMessage) {
+	err, channel, queue := rabbit.ConnectToRabbitMQ(rabbit.JOB_CHECKER_QUEUE_NAME)
 	if err != nil {
 		log.Println(err)
 		return

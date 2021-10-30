@@ -3,7 +3,6 @@ module github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05
 go 1.16
 
 require (
-	github.com/HETIC-MT-P2021/CQRSES_GROUP4 v0.0.0-20210602145136-c86e3d938556
 	github.com/bwmarrin/discordgo v0.23.2
 	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/gin-gonic/gin v1.7.4
@@ -19,6 +18,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/satori/go.uuid v1.2.0
+	github.com/u2takey/ffmpeg-go v0.3.0
 	github.com/ugorji/go v1.2.6 // indirect
 	golang.org/x/net v0.0.0-20211020060615-d418f374d309 // indirect
 	golang.org/x/sys v0.0.0-20211025112917-711f33c9992c // indirect
