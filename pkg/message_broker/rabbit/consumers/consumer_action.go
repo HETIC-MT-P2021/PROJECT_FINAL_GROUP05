@@ -3,12 +3,11 @@ package consumers
 import (
 	"encoding/json"
 
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/commands/video/ffmpeg"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/commands"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord/carlos"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/media_download/video/ytb"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/producers"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
-	"github.com/bwmarrin/discordgo"
 	"github.com/kkdai/youtube/v2"
 )
 
@@ -38,6 +37,7 @@ func (producer *CallMediaProcessingProducer) Execute() error {
 	}
 
 	message := models.MediaProcessingQueueMessage{
+		Type: downloadMessage.Type,
 		FileName: fileName,
 		Options: downloadMessage.Options,
 		DiscordInfo: downloadMessage.DiscordInfo,
@@ -63,12 +63,11 @@ func (producer *MediaProcessingAction) Execute() error {
 		return err
 	}
 
-	processing := ffmpeg.NewCommandRepository()
-	err = processing.MakeVideoClip(processingMessage)
+	err = commands.Dispatch(processingMessage)
 	if err != nil {
 		return err
 	}
-
+	
 	carlosBot := carlos.NewDiscordRepository()
 	err = carlosBot.InitBotWithoutHandler()
 	if err != nil {
@@ -81,30 +80,5 @@ func (producer *MediaProcessingAction) Execute() error {
 }
 
 func (producer *MediaProcessingAction) SetBody(body []byte) {
-	producer.Body = body
-}
-
-type JobCheckerAction struct {
-	DiscordSession *discordgo.Session
-	Body []byte
-}
-
-func NewJobCheckerAction(session *discordgo.Session) *JobCheckerAction {
-	return &JobCheckerAction{
-		DiscordSession: session,
-	}
-}
-
-func (producer *JobCheckerAction) Execute() error {
-	var jobCheckerMessage *models.JobCheckerQueueMessage
-	err := json.Unmarshal(producer.Body, &jobCheckerMessage)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (producer *JobCheckerAction) SetBody(body []byte) {
 	producer.Body = body
 }
