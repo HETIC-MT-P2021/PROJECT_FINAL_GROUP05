@@ -2,11 +2,9 @@ package consumers
 
 import (
 	"encoding/json"
-	"fmt"
-	"os"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/commands/video/ffmpeg"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord/carlos"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/media_download/video/ytb"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/producers"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
@@ -71,26 +69,15 @@ func (producer *MediaProcessingAction) Execute() error {
 		return err
 	}
 
-	dg, err := discordgo.New("Bot " + os.Getenv("REACT_APP_DISCORD_TOKEN"))
+	carlosBot := carlos.NewDiscordRepository()
+	err = carlosBot.InitBotWithoutHandler()
 	if err != nil {
-		fmt.Println("error creating Discord session,", err)
 		return err
 	}
 
-	err = dg.Open()
-	if err != nil {
-		fmt.Println("error opening connection,", err)
-		return err
-	}
-
-	updateDiscordMessage := models.DiscordSession{
-		Session: dg,
-		ChannelID: processingMessage.DiscordInfo.ChannelID,
-		MessageID: processingMessage.DiscordInfo.MessageID,
-	}
-
-	discord.UpdateMessage(updateDiscordMessage, processingMessage.FileName)
-	return err
+	carlosBot.ChannelID = processingMessage.DiscordInfo.ChannelID
+	carlosBot.MessageID = processingMessage.DiscordInfo.MessageID
+	return carlosBot.UpdateCarlosIsProcessingMessage(processingMessage.FileName)
 }
 
 func (producer *MediaProcessingAction) SetBody(body []byte) {
