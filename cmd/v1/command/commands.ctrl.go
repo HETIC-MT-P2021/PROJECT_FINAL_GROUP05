@@ -24,7 +24,7 @@ func GetCommands(c *gin.Context) {
 		})
 	}
 	
-	repo := mysql.NewCommandsRepository(dbConn)
+	repo := mysql.NewCommandRepository(dbConn)
 	commands, err := repo.GetCommands()
 
 	if err != nil {

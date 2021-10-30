@@ -11,14 +11,14 @@ type mysqlCommandRepo struct {
 	Conn *sql.DB
 }
 
-// NewCommandsRepository creates new mysqlCommandRepo
-func NewCommandsRepository(conn *sql.DB) *mysqlCommandRepo {
+// NewCommandRepository creates new mysqlCommandRepo
+func NewCommandRepository(conn *sql.DB) *mysqlCommandRepo {
 	return &mysqlCommandRepo{
 		Conn: conn,
 	}
 }
 
-// GetUserFromUsername to create command from bdd
+// CreateCommand to create command from bdd
 func (db *mysqlCommandRepo) CreateCommand(command models.Command) error {
 	tx, err := db.Conn.Begin()
 	if err != nil {
@@ -31,7 +31,11 @@ func (db *mysqlCommandRepo) CreateCommand(command models.Command) error {
 	}
 	defer stmt.Close()
 
-	if _, err := stmt.Exec(command.Title, command.Command, command.IsChecked); err != nil {
+	if _, err := stmt.Exec(
+		command.Title,
+		command.Command,
+		command.IsActive,
+		command.ServerID); err != nil {
 		return err
 	}
 
@@ -42,7 +46,7 @@ func (db *mysqlCommandRepo) CreateCommand(command models.Command) error {
 	return nil
 }
 
-// GetUserFromUsername to retrieve commands from bdd
+// GetCommands to retrieve commands from bdd
 func (db *mysqlCommandRepo) GetCommands() ([]models.Command, error) {
 	results, err := db.Conn.Query(query.QUERY_FIND_COMMANDS)
 	if err != nil {
@@ -53,7 +57,7 @@ func (db *mysqlCommandRepo) GetCommands() ([]models.Command, error) {
 
 	for results.Next() {
 		var cmd models.Command
-		err = results.Scan(&cmd.Title, &cmd.Command, &cmd.IsChecked)
+		err = results.Scan(&cmd.Title, &cmd.Command, &cmd.IsActive, &cmd.ServerID)
 		if err != nil {
 			return []models.Command{}, err
 		}

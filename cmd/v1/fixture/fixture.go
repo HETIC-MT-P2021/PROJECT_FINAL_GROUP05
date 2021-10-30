@@ -6,5 +6,5 @@ import (
 
 // ApplyRoutes All routes for fixtures
 func ApplyRoutes(r *gin.RouterGroup) {
-	r.POST("/fixtures/commands", CreateCommands)
+	r.POST("/fixtures", CreateFixtures)
 }

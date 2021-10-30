@@ -11,17 +11,19 @@ import (
 func NewCommands(db *sql.DB) error {
 	audioCommand := models.Command{
 		Title: "Extrait audio",
-		Command: "-audio -s X  -d Y -i 'input'",
-		IsChecked: false,
+		Command: "-audio -s X -d Y -i 'input'",
+		IsActive: false,
+		ServerID: "1",
 	}
 
 	videoCommand := models.Command{
 		Title: "Extrait vidéo",
-		Command: "-video -s X  -d Y -i 'input'",
-		IsChecked: false,
+		Command: "-video -s X -d Y -i 'input'",
+		IsActive: false,
+		ServerID: "2",
 	}
 
-	repo := mysql.NewCommandsRepository(db)
+	repo := mysql.NewCommandRepository(db)
 	err := repo.CreateCommand(audioCommand)
 	err = repo.CreateCommand(videoCommand)
 
