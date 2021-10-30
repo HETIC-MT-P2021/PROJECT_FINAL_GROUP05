@@ -3,13 +3,14 @@ package models
 import "github.com/bwmarrin/discordgo"
 
 type DownloadQueueMessage struct {
-		Type      			string  								`json:"type"`
-		MediaLink 			string  								`json:"media_link"`
-		Options   			Options 								`json:"options"`
-		DiscordInfo 		JobCheckerQueueMessage 	`json:"discord_info"`
+	Type      			string  								`json:"type"`
+	MediaLink 			string  								`json:"media_link"`
+	Options   			Options 								`json:"options"`
+	DiscordInfo 		JobCheckerQueueMessage 	`json:"discord_info"`
 }
 
 type MediaProcessingQueueMessage struct {
+	Type      			string  								`json:"type"`
 	FileName 				string  								`json:"file_name"`
 	Options  				Options 								`json:"options"`
 	DiscordInfo 		JobCheckerQueueMessage 	`json:"discord_info"`

@@ -9,14 +9,14 @@ import (
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
-type ffmpegCommandRepo struct {}
+type FfmpegCommandRepo struct {}
 
-// NewCommandRepository creates new ffmpegCommandRepo
-func NewCommandRepository() *ffmpegCommandRepo {
-	return &ffmpegCommandRepo{}
+// NewVideoCommandRepository creates new ffmpegCommandRepo
+func NewVideoCommandRepository() *FfmpegCommandRepo {
+	return &FfmpegCommandRepo{}
 }
 
-func (cmd *ffmpegCommandRepo) MakeVideoClip(processing *models.MediaProcessingQueueMessage) error {
+func (cmd *FfmpegCommandRepo) MakeVideoClip(processing *models.MediaProcessingQueueMessage) error {
 	path := os.Getenv("DOCKER_CONTAINER_PATH")
 	if len(path) <= 0 {
 		return errors.New("Path not found")

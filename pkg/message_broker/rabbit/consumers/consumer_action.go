@@ -3,7 +3,9 @@ package consumers
 import (
 	"encoding/json"
 
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/commands/video/ffmpeg"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/commands"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/commands/implementation"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/commands/logic"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord/carlos"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/media_download/video/ytb"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/producers"
@@ -38,6 +40,7 @@ func (producer *CallMediaProcessingProducer) Execute() error {
 	}
 
 	message := models.MediaProcessingQueueMessage{
+		Type: downloadMessage.Type,
 		FileName: fileName,
 		Options: downloadMessage.Options,
 		DiscordInfo: downloadMessage.DiscordInfo,
@@ -63,11 +66,19 @@ func (producer *MediaProcessingAction) Execute() error {
 		return err
 	}
 
-	processing := ffmpeg.NewCommandRepository()
-	err = processing.MakeVideoClip(processingMessage)
+	command := logic.NewCommandImpl(&implementation.VideoCommand{
+		Message: processingMessage,
+	})
+	err = commands.CommandBus.Dispatch(command)
 	if err != nil {
 		return err
 	}
+
+	/*process := ffmpeg.NewVideoCommandRepository()
+	err = process.MakeVideoClip(processingMessage)
+	if err != nil {
+		return err
+	}*/
 
 	carlosBot := carlos.NewDiscordRepository()
 	err = carlosBot.InitBotWithoutHandler()
