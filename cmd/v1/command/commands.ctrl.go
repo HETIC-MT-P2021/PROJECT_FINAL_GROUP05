@@ -16,7 +16,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Success 200 {string} string	"GET /commands"
-// @Router /commands [get]
+// @Router /commands [GET]
 func GetCommands(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
