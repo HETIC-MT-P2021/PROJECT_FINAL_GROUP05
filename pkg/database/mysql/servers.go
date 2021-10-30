@@ -67,3 +67,25 @@ func (db *mysqlServerRepo) GetServers() ([]models.Server, error) {
 
 	return servers, nil
 }
+
+// GetServer to retrieve server with media and commands data from bdd
+func (db *mysqlServerRepo) GetServer(serverID string) (*models.ServerCommandsAndMedias, error) {
+	rows, err := db.Conn.Query(query.QUERY_FIND_SERVER_WITH_MADIA_AND_CMDS, serverID)
+	if err != nil {
+		return &models.ServerCommandsAndMedias{}, err
+	}
+	server := &models.ServerCommandsAndMedias{}
+	for rows.Next() {
+    command := &models.Command{}
+    err = rows.Scan(
+      &server.ServerName,
+      &server.CreatedAt,
+			&command.Title,
+			&command.Command,
+			&command.IsActive,
+    )
+    server.Commands = append(server.Commands, *command)
+  }
+
+	return server, nil
+}
