@@ -10,4 +10,5 @@ type ServerCommandsAndMedias struct {
 	ServerName 		string 		`json:"server_name"`
   CreatedAt 		string 		`json:"created_at"`
 	Commands 			[]Command `json:"commands"`
+	Medias 				[]Media 	`json:"medias"`
 }

@@ -77,14 +77,19 @@ func (db *mysqlServerRepo) GetServer(serverID string) (*models.ServerCommandsAnd
 	server := &models.ServerCommandsAndMedias{}
 	for rows.Next() {
     command := &models.Command{}
+    media := &models.Media{}
     err = rows.Scan(
       &server.ServerName,
       &server.CreatedAt,
 			&command.Title,
 			&command.Command,
 			&command.IsActive,
+			&media.DiscordUrl,
+			&media.IsArchived,
+			&media.UserID,
     )
     server.Commands = append(server.Commands, *command)
+    server.Medias = append(server.Medias, *media)
   }
 
 	return server, nil
