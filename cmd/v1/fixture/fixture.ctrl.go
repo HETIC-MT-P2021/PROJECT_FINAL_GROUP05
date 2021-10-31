@@ -127,6 +127,7 @@ func CreateMediasFixtures(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Failed to retrieve Database connection",
 		})
+		return
 	}
 
 	if err := fixtures.NewMedias(dbConn); err != nil {

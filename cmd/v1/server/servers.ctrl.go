@@ -22,6 +22,7 @@ func GetServers(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Failed to retrieve Database connection",
 		})
+		return
 	}
 	
 	repo := mysql.NewServerRepository(dbConn)
@@ -31,6 +32,7 @@ func GetServers(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
 		})
+		return
 	}
 	
 	c.JSON(http.StatusFound, servers)
@@ -50,6 +52,7 @@ func GetServer(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Failed to retrieve Database connection",
 		})
+		return
 	}
 	serverID := c.Param("id")
 	repo := mysql.NewServerRepository(dbConn)
@@ -59,6 +62,7 @@ func GetServer(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
 		})
+		return
 	}
 	
 	c.JSON(http.StatusFound, commands)

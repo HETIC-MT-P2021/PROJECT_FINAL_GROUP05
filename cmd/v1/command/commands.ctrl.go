@@ -23,6 +23,7 @@ func GetCommands(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Failed to retrieve Database connection",
 		})
+		return
 	}
 	
 	repo := mysql.NewCommandRepository(dbConn)
@@ -32,6 +33,7 @@ func GetCommands(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
 		})
+		return
 	}
 	
 	c.JSON(http.StatusFound, commands)
@@ -52,6 +54,7 @@ func UpdateCommand(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Failed to retrieve Database connection",
 		})
+		return
 	}
 
 	var req models.Command
@@ -66,6 +69,7 @@ func UpdateCommand(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
 		})
+		return
 	}
 	
 	c.JSON(http.StatusOK, req)
@@ -86,6 +90,7 @@ func UpdateIsActiveCommand(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Failed to retrieve Database connection",
 		})
+		return
 	}
 
 	var req models.Command
@@ -100,6 +105,7 @@ func UpdateIsActiveCommand(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
 		})
+		return
 	}
 	
 	c.JSON(http.StatusOK, gin.H{

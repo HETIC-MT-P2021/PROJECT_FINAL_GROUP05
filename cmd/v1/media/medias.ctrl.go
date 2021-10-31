@@ -30,6 +30,7 @@ func UpdateMedia(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Failed to retrieve Database connection",
 		})
+		return
 	}
 
 	var req models.Media
@@ -44,6 +45,7 @@ func UpdateMedia(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
 		})
+		return
 	}
 	
 	c.JSON(http.StatusOK, req)
@@ -64,6 +66,7 @@ func UpdateIsArchivedMedia(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Failed to retrieve Database connection",
 		})
+		return
 	}
 
 	var req models.Media
@@ -78,6 +81,7 @@ func UpdateIsArchivedMedia(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
 		})
+		return
 	}
 	
 	c.JSON(http.StatusOK, gin.H{
