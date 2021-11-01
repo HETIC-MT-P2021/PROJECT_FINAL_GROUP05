@@ -19,12 +19,7 @@ func NewMediaRepository(conn *sql.DB) *mysqlMediaRepo {
 }
 
 func (repo *mysqlMediaRepo) CreateMedia(media models.Media) error {
-	tx, err := repo.Conn.Begin()
-	if err != nil {
-		return err
-	}
-
-	stmt, err := tx.Prepare(query.QUERY_CREATE_MEDIA)
+	stmt, err := repo.Conn.Prepare(query.QUERY_CREATE_MEDIA)
 	if err != nil {
 		return err
 	}
@@ -35,10 +30,6 @@ func (repo *mysqlMediaRepo) CreateMedia(media models.Media) error {
 		media.IsArchived,
 		media.UserID,
 		media.ServerID); err != nil {
-		return err
-	}
-
-	if err := tx.Commit(); err != nil {
 		return err
 	}
 

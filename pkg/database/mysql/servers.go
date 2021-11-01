@@ -19,13 +19,8 @@ func NewServerRepository(conn *sql.DB) *mysqlServerRepo {
 }
 
 // CreateServer to create server from bdd
-func (db *mysqlServerRepo) CreateServer(server models.Server) error {
-	tx, err := db.Conn.Begin()
-	if err != nil {
-		return err
-	}
-
-	stmt, err := tx.Prepare(query.QUERY_CREATE_SERVER)
+func (repo *mysqlServerRepo) CreateServer(server models.Server) error {
+	stmt, err := repo.Conn.Prepare(query.QUERY_CREATE_SERVER)
 	if err != nil {
 		return err
 	}
@@ -38,16 +33,12 @@ func (db *mysqlServerRepo) CreateServer(server models.Server) error {
 		return err
 	}
 
-	if err := tx.Commit(); err != nil {
-		return err
-	}
-
 	return nil
 }
 
 // GetServers to retrieve servers from bdd
-func (db *mysqlServerRepo) GetServers() ([]models.Server, error) {
-	results, err := db.Conn.Query(query.QUERY_FIND_SERVERS)
+func (repo *mysqlServerRepo) GetServers() ([]models.Server, error) {
+	results, err := repo.Conn.Query(query.QUERY_FIND_SERVERS)
 	if err != nil {
 		return []models.Server{}, err
 	}
@@ -69,8 +60,8 @@ func (db *mysqlServerRepo) GetServers() ([]models.Server, error) {
 }
 
 // GetServer to retrieve server with media and commands data from bdd
-func (db *mysqlServerRepo) GetServer(serverID string) (*models.ServerCommandsAndMedias, error) {
-	rows, err := db.Conn.Query(query.QUERY_FIND_SERVER_WITH_MADIA_AND_CMDS, serverID)
+func (repo *mysqlServerRepo) GetServer(serverID string) (*models.ServerCommandsAndMedias, error) {
+	rows, err := repo.Conn.Query(query.QUERY_FIND_SERVER_WITH_MADIA_AND_CMDS, serverID)
 	if err != nil {
 		return &models.ServerCommandsAndMedias{}, err
 	}
