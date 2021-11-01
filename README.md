@@ -23,7 +23,13 @@ $ docker-compose up --build
 $ docker exec -i db sh -c 'exec mysql -ugoproject -p"$MYSQL_PASSWORD"' < ./build/data/init.sql
 ```
 
-To fill data in database please execute fixtures
+To fill data in database, make the following HTTP request
+
+**POST localhost:8080/api/v1/fixtures**
+
+Now by executing the following HTTP request, data should be returned
+
+**GET localhost:8080/api/v1/servers**
 
 ## Docs 📄
 
