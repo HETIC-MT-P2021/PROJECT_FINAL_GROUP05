@@ -144,3 +144,35 @@ func GetServerMedias(c *gin.Context) {
 	
 	c.JSON(http.StatusFound, utils.GetServerMediasResponse(medias))
 }
+
+// GetServerCommands returns array of commands from database
+// @Summary Get all commands of a server from database
+// @Tags servers
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string	"GET /servers"
+// @Router /servers/{id}/commands [GET]
+func GetServerCommands(c *gin.Context) {
+	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to retrieve Database connection",
+		})
+		return
+	}
+	
+	commandRepo := mysql.NewCommandRepository(dbConn)
+	serverRepo := mysql.NewServerRepository(dbConn, commandRepo)
+
+	serverID := c.Param("id")
+	medias, err := serverRepo.GetServerCommands(serverID)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+		return
+	}
+	
+	c.JSON(http.StatusFound, utils.GetServerCommandsResponse(medias))
+}

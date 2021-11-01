@@ -112,3 +112,23 @@ func (repo *mysqlServerRepo) GetServerMedias(serverID string) ([]models.Media, e
 
 	return medias, nil
 }
+
+func (repo *mysqlServerRepo) GetServerCommands(serverID string) ([]models.Command, error) {
+	rows, err := repo.Conn.Query(query.QUERY_FIND_SERVER_COMMANDS, serverID)
+	if err != nil {
+		return []models.Command{}, err
+	}
+
+	commands := []models.Command{}
+	for rows.Next() {
+		command := models.Command{}
+    err = rows.Scan(
+			&command.Title,
+			&command.Command,
+			&command.IsActive,
+    )
+		commands = append(commands, command)
+  }
+
+	return commands, nil
+}

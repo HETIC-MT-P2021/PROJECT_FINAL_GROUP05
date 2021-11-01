@@ -8,4 +8,5 @@ func ApplyRoutes(r *gin.RouterGroup) {
 	r.GET("/servers/:id", GetServer)
 	r.POST("/servers", CreateServer)
 	r.GET("/servers/:id/medias", GetServerMedias)
+	r.GET("/servers/:id/commands", GetServerCommands)
 }
