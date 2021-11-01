@@ -88,3 +88,37 @@ func UpdateIsArchivedMedia(c *gin.Context) {
 		"is_archived": req.IsArchived,
 	})
 }
+
+// CreateMedia from database
+// @Summary create media from database
+// @Tags medias
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string	"POST /medias"
+// @Router /medias [POST]
+func CreateMedia(c *gin.Context) {
+	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to retrieve Database connection",
+		})
+		return
+	}
+
+	var req models.Media
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	mediaRepo := mysql.NewMediaRepository(dbConn)
+	err := mediaRepo.CreateMedia(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+		return
+	}
+	
+	c.JSON(http.StatusCreated, req)
+}

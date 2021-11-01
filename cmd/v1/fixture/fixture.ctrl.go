@@ -23,6 +23,7 @@ func CreateFixtures(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Failed to retrieve Database connection",
 		})
+		return
 	}
 
 	if err := fixtures.NewServers(dbConn); err != nil {
