@@ -41,3 +41,9 @@ func GetServerMediasResponse(dataMedias []models.Media) []gin.H {
 
 	return medias
 }
+
+func DisplayErrorMessage(c *gin.Context, status int, message string) {
+	c.JSON(status, gin.H{
+		"message": message,
+	})
+}

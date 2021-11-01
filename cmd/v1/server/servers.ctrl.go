@@ -2,6 +2,7 @@ package server
 
 import (
 	"database/sql"
+	"log"
 	"net/http"
 	"time"
 
@@ -11,6 +12,8 @@ import (
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
 )
+
+const StatusInternalError = http.StatusInternalServerError
 
 // GetServers returns array of server from database
 // @Summary Get all servers from database
@@ -23,20 +26,16 @@ import (
 func GetServers(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
 		return
 	}
 	
 	commandRepo := mysql.NewCommandRepository(dbConn)
 	serverRepo := mysql.NewServerRepository(dbConn, commandRepo)
 	servers, err := serverRepo.GetServers()
-
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get servers")
+		log.Println(err)
 		return
 	}
 	
@@ -54,20 +53,16 @@ func GetServers(c *gin.Context) {
 func GetServer(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
 		return
 	}
 	serverID := c.Param("id")
 	commandRepo := mysql.NewCommandRepository(dbConn)
 	serverRepo := mysql.NewServerRepository(dbConn, commandRepo)
 	server, err := serverRepo.GetServer(serverID)
-
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get server")
+		log.Println(err)
 		return
 	}
 	
@@ -84,15 +79,14 @@ func GetServer(c *gin.Context) {
 func CreateServer(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
 		return
 	}
 
 	var req models.Server
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new server")
+		log.Println(err)
 		return
 	}
 
@@ -102,11 +96,9 @@ func CreateServer(c *gin.Context) {
 	commandRepo := mysql.NewCommandRepository(dbConn)
 	serverRepo := mysql.NewServerRepository(dbConn, commandRepo)
 	err := serverRepo.CreateServer(req)
-
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new server")
+		log.Println(err)
 		return
 	}
 	
@@ -123,9 +115,7 @@ func CreateServer(c *gin.Context) {
 func GetServerMedias(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
 		return
 	}
 	
@@ -134,11 +124,9 @@ func GetServerMedias(c *gin.Context) {
 
 	serverID := c.Param("id")
 	medias, err := serverRepo.GetServerMedias(serverID)
-
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get medias")
+		log.Println(err)
 		return
 	}
 	
@@ -155,9 +143,7 @@ func GetServerMedias(c *gin.Context) {
 func GetServerCommands(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
 		return
 	}
 	
@@ -166,11 +152,9 @@ func GetServerCommands(c *gin.Context) {
 
 	serverID := c.Param("id")
 	medias, err := serverRepo.GetServerCommands(serverID)
-
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get commands")
+		log.Println(err)
 		return
 	}
 	

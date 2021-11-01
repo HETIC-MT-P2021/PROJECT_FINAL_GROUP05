@@ -2,12 +2,16 @@ package command
 
 import (
 	"database/sql"
+	"log"
 	"net/http"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
+
+const StatusInternalError = http.StatusInternalServerError
 
 // GetCommands returns array of commands from database
 // @Summary Get all commands from database
@@ -20,9 +24,7 @@ import (
 func GetCommands(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
 		return
 	}
 	
@@ -30,9 +32,8 @@ func GetCommands(c *gin.Context) {
 	commands, err := repo.GetCommands()
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get commands")
+		log.Println(err)
 		return
 	}
 	
@@ -51,24 +52,22 @@ func UpdateCommand(c *gin.Context) {
 
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
 		return
 	}
 
 	var req models.Command
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")
+		log.Println(err)
 		return
 	}
 	
 	repo := mysql.NewCommandRepository(dbConn)
 	err := repo.UpdateCommand(commandID, req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")
+		log.Println(err)
 		return
 	}
 	
@@ -87,24 +86,22 @@ func UpdateIsActiveCommand(c *gin.Context) {
 
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
 		return
 	}
 
 	var req models.Command
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")
+		log.Println(err)
 		return
 	}
 	
 	repo := mysql.NewCommandRepository(dbConn)
 	err := repo.UpdateIsActiveFieldCommand(commandID, req.IsActive)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")
+		log.Println(err)
 		return
 	}
 	

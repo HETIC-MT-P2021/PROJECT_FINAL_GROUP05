@@ -6,8 +6,11 @@ import (
 	"net/http"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql/fixtures"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
+
+const StatusInternalError = http.StatusInternalServerError
 
 // CreateFixtures Insert servers, commands, medias in database
 // @Summary Create servers, commands in db
@@ -20,25 +23,19 @@ import (
 func CreateFixtures(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
 		return
 	}
 
 	if err := fixtures.NewServers(dbConn); err != nil {
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new servers")
 		log.Println(err)
-		c.JSON(http.StatusServiceUnavailable, gin.H{
-			"status": "Not created",
-		})
 		return
 	}
 
 	if err := fixtures.NewMedias(dbConn); err != nil {
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new medias")
 		log.Println(err)
-		c.JSON(http.StatusServiceUnavailable, gin.H{
-			"status": "Not created",
-		})
 		return
 	}
 
@@ -59,16 +56,13 @@ func CreateFixtures(c *gin.Context) {
 func CreateServersFixtures(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
+		return
 	}
 
 	if err := fixtures.NewServers(dbConn); err != nil {
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new servers")
 		log.Println(err)
-		c.JSON(http.StatusServiceUnavailable, gin.H{
-			"status": "Not created",
-		})
 		return
 	}
 
@@ -88,16 +82,13 @@ func CreateServersFixtures(c *gin.Context) {
 func CreateCommandsFixtures(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
+		return
 	}
 
 	if err := fixtures.NewCommands(dbConn); err != nil {
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new commands")
 		log.Println(err)
-		c.JSON(http.StatusServiceUnavailable, gin.H{
-			"status": "Not created",
-		})
 		return
 	}
 
@@ -117,17 +108,12 @@ func CreateCommandsFixtures(c *gin.Context) {
 func CreateMediasFixtures(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed to retrieve Database connection",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
 		return
 	}
 
 	if err := fixtures.NewMedias(dbConn); err != nil {
-		log.Println(err)
-		c.JSON(http.StatusServiceUnavailable, gin.H{
-			"status": "Not created",
-		})
+		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new medias")
 		return
 	}
 
