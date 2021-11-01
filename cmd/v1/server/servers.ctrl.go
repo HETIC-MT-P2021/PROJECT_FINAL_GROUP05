@@ -112,3 +112,35 @@ func CreateServer(c *gin.Context) {
 	
 	c.JSON(http.StatusCreated, req)
 }
+
+// GetServerMedias returns array of medias from database
+// @Summary Get all medias of a server from database
+// @Tags servers
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string	"GET /servers"
+// @Router /servers/{id}/medias [GET]
+func GetServerMedias(c *gin.Context) {
+	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to retrieve Database connection",
+		})
+		return
+	}
+	
+	commandRepo := mysql.NewCommandRepository(dbConn)
+	serverRepo := mysql.NewServerRepository(dbConn, commandRepo)
+
+	serverID := c.Param("id")
+	medias, err := serverRepo.GetServerMedias(serverID)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+		return
+	}
+	
+	c.JSON(http.StatusFound, utils.GetServerMediasResponse(medias))
+}

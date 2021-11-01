@@ -7,4 +7,5 @@ type serverRepository interface {
 	CreateServer(models.Server) error
 	GetServers() ([]models.Server, error)
 	GetServer(serverID string) (*models.ServerCommandsAndMedias, error)
+	GetServerMedias(serverID string) ([]models.Media, error)
 }

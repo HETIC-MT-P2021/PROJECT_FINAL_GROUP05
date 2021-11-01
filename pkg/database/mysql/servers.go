@@ -52,7 +52,6 @@ func (repo *mysqlServerRepo) GetServers() ([]models.Server, error) {
 	}
 
 	servers := []models.Server{}
-
 	for results.Next() {
 		var server models.Server
 		err = results.Scan(
@@ -92,4 +91,24 @@ func (repo *mysqlServerRepo) GetServer(serverID string) (*models.ServerCommandsA
   }
 
 	return server, nil
+}
+
+func (repo *mysqlServerRepo) GetServerMedias(serverID string) ([]models.Media, error) {
+	rows, err := repo.Conn.Query(query.QUERY_FIND_SERVER_MEDIAS, serverID)
+	if err != nil {
+		return []models.Media{}, err
+	}
+
+	medias := []models.Media{}
+	for rows.Next() {
+		media := models.Media{}
+    err = rows.Scan(
+			&media.DiscordUrl,
+			&media.IsArchived,
+			&media.UserID,
+    )
+		medias = append(medias, media)
+  }
+
+	return medias, nil
 }

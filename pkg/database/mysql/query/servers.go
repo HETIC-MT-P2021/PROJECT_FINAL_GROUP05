@@ -17,4 +17,10 @@ const (
 		LEFT JOIN media ON srv.id = media.server_id
 		WHERE srv.id = ?;
 	`
+	QUERY_FIND_SERVER_MEDIAS string = `
+		SELECT media.discord_url, media.is_archived, media.user_id
+		FROM srv
+		JOIN media ON srv.id = media.server_id
+		WHERE srv.id = ?;
+	`
 )

@@ -9,14 +9,14 @@ func GetServerResponse(data *models.ServerCommandsAndMedias) gin.H{
 	return gin.H{
 		"server_name": data.ServerName,
 		"created_at": data.CreatedAt,
-		"commands": GetServerCommandsResponse(data),
-		"medias": GetServerMediasResponse(data),
+		"commands": GetServerCommandsResponse(data.Commands),
+		"medias": GetServerMediasResponse(data.Medias),
 	}
 }
 
-func GetServerCommandsResponse(data *models.ServerCommandsAndMedias) []gin.H {
+func GetServerCommandsResponse(dataCommands []models.Command) []gin.H {
 	var commands []gin.H
-	for _, command := range data.Commands {
+	for _, command := range dataCommands {
 		displayedCommand := gin.H{
 			"title": command.Title,
 			"command": command.Command,
@@ -28,9 +28,9 @@ func GetServerCommandsResponse(data *models.ServerCommandsAndMedias) []gin.H {
 	return commands
 }
 
-func GetServerMediasResponse(data *models.ServerCommandsAndMedias) []gin.H {
+func GetServerMediasResponse(dataMedias []models.Media) []gin.H {
 	var medias []gin.H
-	for _, media := range data.Medias {
+	for _, media := range dataMedias {
 		displayedMedia := gin.H{
 			"discord_url": media.DiscordUrl,
 			"is_archived": media.IsArchived,
