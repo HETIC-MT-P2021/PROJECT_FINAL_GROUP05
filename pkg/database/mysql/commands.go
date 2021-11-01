@@ -37,6 +37,40 @@ func (repo *mysqlCommandRepo) CreateCommand(command models.Command) error {
 	return nil
 }
 
+var DefaultCommand []models.Command = []models.Command {
+	models.Command{
+		Title: "Extrait vidéo",
+		Command: "video -s 'X' -d 'Y' -i 'input'",		
+		IsActive: true,
+	},
+	models.Command{
+		Title: "Extrait audio",
+		Command: "audio -s 'X' -d 'Y' -i 'input'",		
+		IsActive: true,
+	},
+}
+
+func (repo *mysqlCommandRepo) CreateDefaultCommandsInServer(serverID string) error {
+	for _, command := range DefaultCommand {
+		stmt, err := repo.Conn.Prepare(query.QUERY_CREATE_COMMAND)
+		if err != nil {
+			return err
+		}
+		defer stmt.Close()
+	
+		if _, err := stmt.Exec(
+			command.Title,
+			command.Command,
+			command.IsActive,
+			serverID); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+
 // GetCommands to retrieve commands from bdd
 func (repo *mysqlCommandRepo) GetCommands() ([]models.Command, error) {
 	results, err := repo.Conn.Query(query.QUERY_FIND_COMMANDS)

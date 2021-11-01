@@ -3,18 +3,21 @@ package mysql
 import (
 	"database/sql"
 
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql/query"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 )
 
 type mysqlServerRepo struct {
 	Conn *sql.DB
+	CommandRepo database.CommandRepository
 }
 
 // NewServerRepository creates new mysqlServerRepo
-func NewServerRepository(conn *sql.DB) *mysqlServerRepo {
+func NewServerRepository(conn *sql.DB, repo database.CommandRepository) *mysqlServerRepo {
 	return &mysqlServerRepo{
 		Conn: conn,
+		CommandRepo: repo,
 	}
 }
 
@@ -30,6 +33,11 @@ func (repo *mysqlServerRepo) CreateServer(server models.Server) error {
 		server.ID,
 		server.ServerName,
 		server.CreatedAt); err != nil {
+		return err
+	}
+
+	err = repo.CommandRepo.CreateDefaultCommandsInServer(server.ID)
+	if err != nil {
 		return err
 	}
 

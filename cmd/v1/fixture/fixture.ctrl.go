@@ -33,14 +33,6 @@ func CreateFixtures(c *gin.Context) {
 		return
 	}
 
-	if err := fixtures.NewCommands(dbConn); err != nil {
-		log.Println(err)
-		c.JSON(http.StatusServiceUnavailable, gin.H{
-			"status": "Not created",
-		})
-		return
-	}
-
 	if err := fixtures.NewMedias(dbConn); err != nil {
 		log.Println(err)
 		c.JSON(http.StatusServiceUnavailable, gin.H{

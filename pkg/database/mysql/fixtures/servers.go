@@ -21,9 +21,10 @@ func NewServers(db *sql.DB) error {
 		CreatedAt: "2021-02-02",
 	}
 
-	repo := mysql.NewServerRepository(db)
-	err := repo.CreateServer(serverOne)
-	err = repo.CreateServer(serverTwo)
+	commandRepo := mysql.NewCommandRepository(db)
+	serverRepo := mysql.NewServerRepository(db, commandRepo)
+	err := serverRepo.CreateServer(serverOne)
+	err = serverRepo.CreateServer(serverTwo)
 
 	return err
 }

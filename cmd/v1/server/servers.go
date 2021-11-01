@@ -6,4 +6,5 @@ import "github.com/gin-gonic/gin"
 func ApplyRoutes(r *gin.RouterGroup) {
 	r.GET("/servers", GetServers)
 	r.GET("/servers/:id", GetServer)
+	r.POST("/servers", CreateServer)
 }

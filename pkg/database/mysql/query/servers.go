@@ -13,8 +13,8 @@ const (
 					 command.title, command.command, command.is_active,
 					 media.discord_url, media.is_archived, media.user_id
 		FROM srv
-		JOIN command ON srv.id = command.server_id
-		JOIN media ON srv.id = media.server_id
+		LEFT JOIN command ON srv.id = command.server_id
+		LEFT JOIN media ON srv.id = media.server_id
 		WHERE srv.id = ?;
 	`
 )
