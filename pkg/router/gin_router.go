@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	v1 "github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/cmd/v1"
-	_ "github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/docs"
+	_ "github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/docs/api"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/gin-gonic/gin"
