@@ -1,0 +1,369 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/commands": {
+            "get": {
+                "description": "Get an array of command struct",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "commands"
+                ],
+                "summary": "Get all commands from database",
+                "responses": {
+                    "200": {
+                        "description": "GET /commands",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/commands/{id}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "commands"
+                ],
+                "summary": "update command from database",
+                "responses": {
+                    "200": {
+                        "description": "GET /commands",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "commands"
+                ],
+                "summary": "update is_active field on a command from database",
+                "responses": {
+                    "200": {
+                        "description": "GET /commands",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/fixtures": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "fixtures"
+                ],
+                "summary": "Create servers, commands in db",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPStatus"
+                        }
+                    },
+                    "500": {
+                        "description": "Not Created",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPStatus"
+                        }
+                    }
+                }
+            }
+        },
+        "/fixtures/commands": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "fixtures"
+                ],
+                "summary": "Create commands in db",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPStatus"
+                        }
+                    },
+                    "500": {
+                        "description": "Not Created",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPStatus"
+                        }
+                    }
+                }
+            }
+        },
+        "/fixtures/medias": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "fixtures"
+                ],
+                "summary": "Create medias in db",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPStatus"
+                        }
+                    },
+                    "500": {
+                        "description": "Not Created",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPStatus"
+                        }
+                    }
+                }
+            }
+        },
+        "/fixtures/servers": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "fixtures"
+                ],
+                "summary": "Create servers in db",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPStatus"
+                        }
+                    },
+                    "500": {
+                        "description": "Not Created",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPStatus"
+                        }
+                    }
+                }
+            }
+        },
+        "/medias": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medias"
+                ],
+                "summary": "create media from database",
+                "responses": {
+                    "200": {
+                        "description": "POST /medias",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/medias/{id}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medias"
+                ],
+                "summary": "update media from database",
+                "responses": {
+                    "200": {
+                        "description": "GET /medias",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "medias"
+                ],
+                "summary": "update is_archived field on a media from database",
+                "responses": {
+                    "200": {
+                        "description": "GET /medias/id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/servers": {
+            "get": {
+                "description": "Get an array of server struct",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "servers"
+                ],
+                "summary": "Get all servers from database",
+                "responses": {
+                    "200": {
+                        "description": "GET /servers",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "servers"
+                ],
+                "summary": "Insert a server with default commands in database",
+                "responses": {
+                    "201": {
+                        "description": "POST /servers",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/servers/{id}": {
+            "get": {
+                "description": "Get server struct with command and media struct",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "servers"
+                ],
+                "summary": "Get server from database",
+                "responses": {
+                    "200": {
+                        "description": "GET /servers",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/servers/{id}/commands": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "servers"
+                ],
+                "summary": "Get all commands of a server from database",
+                "responses": {
+                    "200": {
+                        "description": "GET /servers",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/servers/{id}/medias": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "servers"
+                ],
+                "summary": "Get all medias of a server from database",
+                "responses": {
+                    "200": {
+                        "description": "GET /servers",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "utils.HTTPStatus": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

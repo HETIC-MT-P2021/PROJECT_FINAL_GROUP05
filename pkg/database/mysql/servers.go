@@ -11,13 +11,18 @@ import (
 type mysqlServerRepo struct {
 	Conn *sql.DB
 	CommandRepo database.CommandRepository
+	MediaRepo database.MediaRepository
 }
 
 // NewServerRepository creates new mysqlServerRepo
-func NewServerRepository(conn *sql.DB, repo database.CommandRepository) *mysqlServerRepo {
+func NewServerRepository(
+	conn *sql.DB, 
+	commandRepo database.CommandRepository,
+	mediaRepo database.MediaRepository) *mysqlServerRepo {
 	return &mysqlServerRepo{
 		Conn: conn,
-		CommandRepo: repo,
+		CommandRepo: commandRepo,
+		MediaRepo: mediaRepo,
 	}
 }
 
@@ -68,27 +73,32 @@ func (repo *mysqlServerRepo) GetServers() ([]models.Server, error) {
 
 // GetServer to retrieve server with media and commands data from bdd
 func (repo *mysqlServerRepo) GetServer(serverID string) (*models.ServerCommandsAndMedias, error) {
-	rows, err := repo.Conn.Query(query.QUERY_FIND_SERVER_WITH_MADIA_AND_CMDS, serverID)
+	rows, err := repo.Conn.Query(query.QUERY_FIND_SERVER, serverID)
 	if err != nil {
 		return &models.ServerCommandsAndMedias{}, err
 	}
+
 	server := &models.ServerCommandsAndMedias{}
 	for rows.Next() {
-    command := &models.Command{}
-    media := &models.Media{}
     err = rows.Scan(
+      &server.ID,
       &server.ServerName,
       &server.CreatedAt,
-			&command.Title,
-			&command.Command,
-			&command.IsActive,
-			&media.DiscordUrl,
-			&media.IsArchived,
-			&media.UserID,
     )
-    server.Commands = append(server.Commands, *command)
-    server.Medias = append(server.Medias, *media)
   }
+
+	commands, err := repo.GetServerCommands(serverID)
+	if err != nil {
+		return &models.ServerCommandsAndMedias{}, err
+	}
+
+	medias, err := repo.GetServerMedias(serverID)
+	if err != nil {
+		return &models.ServerCommandsAndMedias{}, err
+	}
+
+	server.Commands = commands
+	server.Medias = medias
 
 	return server, nil
 }

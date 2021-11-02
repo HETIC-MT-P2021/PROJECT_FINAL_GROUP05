@@ -1,0 +1,236 @@
+definitions:
+  utils.HTTPStatus:
+    properties:
+      status:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /commands:
+    get:
+      consumes:
+      - application/json
+      description: Get an array of command struct
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: GET /commands
+          schema:
+            type: string
+      summary: Get all commands from database
+      tags:
+      - commands
+  /commands/{id}:
+    patch:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: GET /commands
+          schema:
+            type: string
+      summary: update is_active field on a command from database
+      tags:
+      - commands
+    put:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: GET /commands
+          schema:
+            type: string
+      summary: update command from database
+      tags:
+      - commands
+  /fixtures:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/utils.HTTPStatus'
+        "500":
+          description: Not Created
+          schema:
+            $ref: '#/definitions/utils.HTTPStatus'
+      summary: Create servers, commands in db
+      tags:
+      - fixtures
+  /fixtures/commands:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/utils.HTTPStatus'
+        "500":
+          description: Not Created
+          schema:
+            $ref: '#/definitions/utils.HTTPStatus'
+      summary: Create commands in db
+      tags:
+      - fixtures
+  /fixtures/medias:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/utils.HTTPStatus'
+        "500":
+          description: Not Created
+          schema:
+            $ref: '#/definitions/utils.HTTPStatus'
+      summary: Create medias in db
+      tags:
+      - fixtures
+  /fixtures/servers:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/utils.HTTPStatus'
+        "500":
+          description: Not Created
+          schema:
+            $ref: '#/definitions/utils.HTTPStatus'
+      summary: Create servers in db
+      tags:
+      - fixtures
+  /medias:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: POST /medias
+          schema:
+            type: string
+      summary: create media from database
+      tags:
+      - medias
+  /medias/{id}:
+    patch:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: GET /medias/id
+          schema:
+            type: string
+      summary: update is_archived field on a media from database
+      tags:
+      - medias
+    put:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: GET /medias
+          schema:
+            type: string
+      summary: update media from database
+      tags:
+      - medias
+  /servers:
+    get:
+      consumes:
+      - application/json
+      description: Get an array of server struct
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: GET /servers
+          schema:
+            type: string
+      summary: Get all servers from database
+      tags:
+      - servers
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: POST /servers
+          schema:
+            type: string
+      summary: Insert a server with default commands in database
+      tags:
+      - servers
+  /servers/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get server struct with command and media struct
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: GET /servers
+          schema:
+            type: string
+      summary: Get server from database
+      tags:
+      - servers
+  /servers/{id}/commands:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: GET /servers
+          schema:
+            type: string
+      summary: Get all commands of a server from database
+      tags:
+      - servers
+  /servers/{id}/medias:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: GET /servers
+          schema:
+            type: string
+      summary: Get all medias of a server from database
+      tags:
+      - servers
+swagger: "2.0"

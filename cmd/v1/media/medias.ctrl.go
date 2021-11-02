@@ -63,6 +63,12 @@ func UpdateMedia(c *gin.Context) {
 // @Router /medias/{id} [PATCH]
 func UpdateIsArchivedMedia(c *gin.Context) {
 	mediaID := c.Param("id")
+	mediaIDConverted, err := strconv.Atoi(mediaID)
+	if err != nil {
+		utils.DisplayErrorMessage(c, StatusInternalError, "Media is not valid")
+		log.Println(err)
+		return
+	}
 
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
 	if !ok {
@@ -78,7 +84,7 @@ func UpdateIsArchivedMedia(c *gin.Context) {
 	}
 	
 	repo := mysql.NewMediaRepository(dbConn)
-	err := repo.UpdateIsArchivedFieldMedia(mediaID, req.IsArchived)
+	err = repo.UpdateIsArchivedFieldMedia(mediaIDConverted, req.IsArchived)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update media")
 		log.Println(err)

@@ -22,7 +22,8 @@ func NewServers(db *sql.DB) error {
 	}
 
 	commandRepo := mysql.NewCommandRepository(db)
-	serverRepo := mysql.NewServerRepository(db, commandRepo)
+	mediaRepo := mysql.NewMediaRepository(db)
+	serverRepo := mysql.NewServerRepository(db, commandRepo, mediaRepo)
 	err := serverRepo.CreateServer(serverOne)
 	err = serverRepo.CreateServer(serverTwo)
 

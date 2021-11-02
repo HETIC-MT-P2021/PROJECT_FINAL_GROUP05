@@ -31,7 +31,8 @@ func GetServers(c *gin.Context) {
 	}
 	
 	commandRepo := mysql.NewCommandRepository(dbConn)
-	serverRepo := mysql.NewServerRepository(dbConn, commandRepo)
+	mediaRepo := mysql.NewMediaRepository(dbConn)
+	serverRepo := mysql.NewServerRepository(dbConn, commandRepo, mediaRepo)
 	servers, err := serverRepo.GetServers()
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get servers")
@@ -58,7 +59,8 @@ func GetServer(c *gin.Context) {
 	}
 	serverID := c.Param("id")
 	commandRepo := mysql.NewCommandRepository(dbConn)
-	serverRepo := mysql.NewServerRepository(dbConn, commandRepo)
+	mediaRepo := mysql.NewMediaRepository(dbConn)
+	serverRepo := mysql.NewServerRepository(dbConn, commandRepo, mediaRepo)
 	server, err := serverRepo.GetServer(serverID)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get server")
@@ -94,7 +96,8 @@ func CreateServer(c *gin.Context) {
 	req.CreatedAt = time.Unix(time.Now().Unix(), 0).Format("2000-01-01")
 
 	commandRepo := mysql.NewCommandRepository(dbConn)
-	serverRepo := mysql.NewServerRepository(dbConn, commandRepo)
+	mediaRepo := mysql.NewMediaRepository(dbConn)
+	serverRepo := mysql.NewServerRepository(dbConn, commandRepo, mediaRepo)
 	err := serverRepo.CreateServer(req)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new server")
@@ -120,7 +123,8 @@ func GetServerMedias(c *gin.Context) {
 	}
 	
 	commandRepo := mysql.NewCommandRepository(dbConn)
-	serverRepo := mysql.NewServerRepository(dbConn, commandRepo)
+	mediaRepo := mysql.NewMediaRepository(dbConn)
+	serverRepo := mysql.NewServerRepository(dbConn, commandRepo, mediaRepo)
 
 	serverID := c.Param("id")
 	medias, err := serverRepo.GetServerMedias(serverID)
@@ -148,7 +152,8 @@ func GetServerCommands(c *gin.Context) {
 	}
 	
 	commandRepo := mysql.NewCommandRepository(dbConn)
-	serverRepo := mysql.NewServerRepository(dbConn, commandRepo)
+	mediaRepo := mysql.NewMediaRepository(dbConn)
+	serverRepo := mysql.NewServerRepository(dbConn, commandRepo, mediaRepo)
 
 	serverID := c.Param("id")
 	medias, err := serverRepo.GetServerCommands(serverID)

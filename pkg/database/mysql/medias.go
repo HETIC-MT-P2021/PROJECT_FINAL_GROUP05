@@ -55,7 +55,7 @@ func (repo *mysqlMediaRepo) UpdateMedia(mediaID int, media models.Media) error {
 }
 
 // UpdateIsArchivedFieldMedia to update media field called is_archived from bdd
-func (repo *mysqlMediaRepo) UpdateIsArchivedFieldMedia(mediaID string, isArchived bool) error {
+func (repo *mysqlMediaRepo) UpdateIsArchivedFieldMedia(mediaID int, isArchived bool) error {
 	stmt, err := repo.Conn.Prepare(query.QUERY_UPDATE_FIELD_IS_ARCHIVED_MEDIA)
 	if err != nil {
 		return err

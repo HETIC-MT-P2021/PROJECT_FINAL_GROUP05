@@ -17,8 +17,8 @@ const StatusInternalError = http.StatusInternalServerError
 // @Tags fixtures
 // @Accept  json
 // @Produce  json
-// @Success 201 {object} pkg.HTTPStatus "Created"
-// @Failure 500 {object} pkg.HTTPStatus "Not Created"
+// @Success 201 {object} utils.HTTPStatus "Created"
+// @Failure 500 {object} utils.HTTPStatus "Not Created"
 // @Router /fixtures [POST]
 func CreateFixtures(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
@@ -50,8 +50,8 @@ func CreateFixtures(c *gin.Context) {
 // @Tags fixtures
 // @Accept  json
 // @Produce  json
-// @Success 201 {object} pkg.HTTPStatus "Created"
-// @Failure 500 {object} pkg.HTTPStatus "Not Created"
+// @Success 201 {object} utils.HTTPStatus "Created"
+// @Failure 500 {object} utils.HTTPStatus "Not Created"
 // @Router /fixtures/servers [POST]
 func CreateServersFixtures(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
@@ -76,8 +76,8 @@ func CreateServersFixtures(c *gin.Context) {
 // @Tags fixtures
 // @Accept  json
 // @Produce  json
-// @Success 201 {object} pkg.HTTPStatus "Created"
-// @Failure 500 {object} pkg.HTTPStatus "Not Created"
+// @Success 201 {object} utils.HTTPStatus "Created"
+// @Failure 500 {object} utils.HTTPStatus "Not Created"
 // @Router /fixtures/commands [POST]
 func CreateCommandsFixtures(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
@@ -102,8 +102,8 @@ func CreateCommandsFixtures(c *gin.Context) {
 // @Tags fixtures
 // @Accept  json
 // @Produce  json
-// @Success 201 {object} pkg.HTTPStatus "Created"
-// @Failure 500 {object} pkg.HTTPStatus "Not Created"
+// @Success 201 {object} utils.HTTPStatus "Created"
+// @Failure 500 {object} utils.HTTPStatus "Not Created"
 // @Router /fixtures/medias [POST]
 func CreateMediasFixtures(c *gin.Context) {
 	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
