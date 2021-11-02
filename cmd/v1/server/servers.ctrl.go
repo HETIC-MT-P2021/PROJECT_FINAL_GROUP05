@@ -10,7 +10,6 @@ import (
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/gin-gonic/gin"
-	uuid "github.com/satori/go.uuid"
 )
 
 const StatusInternalError = http.StatusInternalServerError
@@ -75,7 +74,6 @@ func CreateServer(c *gin.Context) {
 		return
 	}
 
-	req.ID = uuid.NewV4().String()
 	req.CreatedAt = time.Unix(time.Now().Unix(), 0).Format("2000-01-01")
 
 	commandRepo := mysql.NewCommandRepository(database.DB)

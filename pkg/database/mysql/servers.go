@@ -35,13 +35,13 @@ func (repo *mysqlServerRepo) CreateServer(server models.Server) error {
 	defer stmt.Close()
 
 	if _, err := stmt.Exec(
-		server.ID,
+		server.ServerID,
 		server.ServerName,
 		server.CreatedAt); err != nil {
 		return err
 	}
 
-	err = repo.CommandRepo.CreateDefaultCommandsInServer(server.ID)
+	err = repo.CommandRepo.CreateDefaultCommandsInServer(server.ServerID)
 	if err != nil {
 		return err
 	}
@@ -60,8 +60,10 @@ func (repo *mysqlServerRepo) GetServers() ([]models.Server, error) {
 	for results.Next() {
 		var server models.Server
 		err = results.Scan(
-			&server.ID, 
-			&server.ServerName, &server.CreatedAt)
+			&server.ID,
+			&server.ServerID,
+			&server.ServerName,
+			&server.CreatedAt)
 		if err != nil {
 			return []models.Server{}, err
 		}
@@ -82,6 +84,7 @@ func (repo *mysqlServerRepo) GetServer(serverID string) (*models.ServerCommandsA
 	for rows.Next() {
     err = rows.Scan(
       &server.ID,
+      &server.ServerID,
       &server.ServerName,
       &server.CreatedAt,
     )

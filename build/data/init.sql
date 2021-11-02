@@ -5,11 +5,12 @@ CREATE TABLE IF NOT EXISTS command (
     title VARCHAR(255) NOT NULL,
     command VARCHAR(255) NOT NULL,
     is_active BOOLEAN NOT NULL,
-    server_id VARCHAR(255) NOT NULL
+    server_id VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS srv (
-    id VARCHAR(255) PRIMARY KEY NOT NULL,
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    server_id VARCHAR(100) NOT NULL UNIQUE,
     server_name VARCHAR(255) NOT NULL,
     created_at DATE NOT NULL
 );
@@ -19,17 +20,17 @@ CREATE TABLE IF NOT EXISTS media (
     discord_url VARCHAR(255) NOT NULL,
     is_archived BOOLEAN NOT NULL,
     user_id VARCHAR(255) NOT NULL,
-    server_id VARCHAR(255) NOT NULL
+    server_id VARCHAR(100) NOT NULL
 );
 
 ALTER TABLE command 
 ADD CONSTRAINT command_srv
 FOREIGN KEY (server_id) 
-REFERENCES srv(id) 
+REFERENCES srv(server_id) 
 ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE media 
 ADD CONSTRAINT media_srv
 FOREIGN KEY (server_id) 
-REFERENCES srv(id) 
+REFERENCES srv(server_id) 
 ON DELETE RESTRICT ON UPDATE RESTRICT;

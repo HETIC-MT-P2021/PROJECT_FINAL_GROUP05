@@ -10,13 +10,13 @@ import (
 // NewServers Creates 2 servers
 func NewServers(db *sql.DB) error {
 	serverOne := models.Server{
-		ID: "b48a2954-9a51-4f31-84a8-3bc16e6a241f",
+		ServerID: "b48a2954-9a51-4f31-84a8-3bc16e6a241f",
 		ServerName: "Wyllis",
 		CreatedAt: "2021-01-01",
 	}
 
 	serverTwo := models.Server{
-		ID: "c59b3065-0b62-5g42-95b9-4cd27f7b352g",
+		ServerID: "x48a2954-9a51-4f31-84a8-3bc16e6a241f",
 		ServerName: "Jibé",
 		CreatedAt: "2021-02-02",
 	}
