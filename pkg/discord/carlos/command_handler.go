@@ -2,6 +2,7 @@ package carlos
 
 import (
 	"log"
+	"regexp"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord/carlos/template"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/producers"
@@ -10,11 +11,22 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+const (
+	regexFindType = `^(audio|video|image)`
+)
+
 func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
 
+	log.Println(m.GuildID) // server_id
+	typeRegex := regexp.MustCompile(regexFindType)
+	isMediaType := typeRegex.Match([]byte(m.Content))
+	if !isMediaType {
+		return
+	}
+	
 	messageForDiscord := template.NewMessageSendWrapper()
 	messageForDiscord.SetCarlosIsProcessingMessage()
 

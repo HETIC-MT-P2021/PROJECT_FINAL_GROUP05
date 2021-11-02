@@ -25,4 +25,11 @@ const (
 		JOIN command ON srv.id = command.server_id
 		WHERE srv.id = ?;
 	`
+	QUERY_FIND_SERVER_COMMAND string = `
+		SELECT command.title, command.command, command.is_active
+		FROM srv
+		JOIN command ON srv.id = command.server_id
+		WHERE srv.id = ?
+		AND command.title = ?;
+	`
 )
