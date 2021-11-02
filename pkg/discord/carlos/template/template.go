@@ -27,6 +27,11 @@ func (message *MessageSendWrapper) SetCarlosIsProcessingMessage() {
 		"State : In progress")
 }
 
+func (message *MessageSendWrapper) SetForbiddenAccessMessage() {
+	message.SetEmptyEmbed()
+	message.SetTitle("You're not registered to our bot")
+}
+
 func (message *MessageSendWrapper) SetEmptyEmbed() {
 	message.MessageSend.Embed = &discordgo.MessageEmbed{}
 }

@@ -1,10 +1,10 @@
 package command
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
 
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
@@ -22,13 +22,7 @@ const StatusInternalError = http.StatusInternalServerError
 // @Success 200 {string} string	"GET /commands"
 // @Router /commands [GET]
 func GetCommands(c *gin.Context) {
-	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
-	if !ok {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
-		return
-	}
-	
-	repo := mysql.NewCommandRepository(dbConn)
+	repo := mysql.NewCommandRepository(database.DB)
 	commands, err := repo.GetCommands()
 
 	if err != nil {
@@ -50,12 +44,6 @@ func GetCommands(c *gin.Context) {
 func UpdateCommand(c *gin.Context) {
 	commandID := c.Param("id")
 
-	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
-	if !ok {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
-		return
-	}
-
 	var req models.Command
 	if err := c.BindJSON(&req); err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")
@@ -63,7 +51,7 @@ func UpdateCommand(c *gin.Context) {
 		return
 	}
 	
-	repo := mysql.NewCommandRepository(dbConn)
+	repo := mysql.NewCommandRepository(database.DB)
 	err := repo.UpdateCommand(commandID, req)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")
@@ -84,12 +72,6 @@ func UpdateCommand(c *gin.Context) {
 func UpdateIsActiveCommand(c *gin.Context) {
 	commandID := c.Param("id")
 
-	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
-	if !ok {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
-		return
-	}
-
 	var req models.Command
 	if err := c.BindJSON(&req); err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")
@@ -97,7 +79,7 @@ func UpdateIsActiveCommand(c *gin.Context) {
 		return
 	}
 	
-	repo := mysql.NewCommandRepository(dbConn)
+	repo := mysql.NewCommandRepository(database.DB)
 	err := repo.UpdateIsActiveFieldCommand(commandID, req.IsActive)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")

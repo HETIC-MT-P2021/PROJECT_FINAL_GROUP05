@@ -5,8 +5,8 @@ import (
 
 	v1 "github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/cmd/v1"
 	_ "github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/docs/api"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -19,7 +19,7 @@ func Init() (error, *gin.Engine) {
 	if err != nil {
 		return err, nil
 	}
-	router.Use(utils.ApiMiddleware(mysqlConnector))
+	database.DB = mysqlConnector
 
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))

@@ -1,11 +1,11 @@
 package media
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
 	"strconv"
 
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
@@ -30,12 +30,6 @@ func UpdateMedia(c *gin.Context) {
 		return
 	}
 
-	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
-	if !ok {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
-		return
-	}
-
 	var req models.Media
 	if err := c.BindJSON(&req); err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update media")
@@ -43,7 +37,7 @@ func UpdateMedia(c *gin.Context) {
 		return
 	}
 	
-	repo := mysql.NewMediaRepository(dbConn)
+	repo := mysql.NewMediaRepository(database.DB)
 	err = repo.UpdateMedia(mediaIDConverted, req)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update media")
@@ -70,12 +64,6 @@ func UpdateIsArchivedMedia(c *gin.Context) {
 		return
 	}
 
-	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
-	if !ok {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
-		return
-	}
-
 	var req models.Media
 	if err := c.BindJSON(&req); err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update media")
@@ -83,7 +71,7 @@ func UpdateIsArchivedMedia(c *gin.Context) {
 		return
 	}
 	
-	repo := mysql.NewMediaRepository(dbConn)
+	repo := mysql.NewMediaRepository(database.DB)
 	err = repo.UpdateIsArchivedFieldMedia(mediaIDConverted, req.IsArchived)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update media")
@@ -104,12 +92,6 @@ func UpdateIsArchivedMedia(c *gin.Context) {
 // @Success 200 {string} string	"POST /medias"
 // @Router /medias [POST]
 func CreateMedia(c *gin.Context) {
-	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
-	if !ok {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
-		return
-	}
-
 	var req models.Media
 	if err := c.BindJSON(&req); err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new media")
@@ -117,7 +99,7 @@ func CreateMedia(c *gin.Context) {
 		return
 	}
 
-	mediaRepo := mysql.NewMediaRepository(dbConn)
+	mediaRepo := mysql.NewMediaRepository(database.DB)
 	err := mediaRepo.CreateMedia(req)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new media")

@@ -4,6 +4,8 @@ import (
 	"log"
 	"regexp"
 
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord/carlos/template"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/producers"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
@@ -20,19 +22,34 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	log.Println(m.GuildID) // server_id
 	typeRegex := regexp.MustCompile(regexFindType)
 	isMediaType := typeRegex.Match([]byte(m.Content))
 	if !isMediaType {
 		return
 	}
-	
+
+	commandRepo := mysql.NewCommandRepository(database.DB)
+	mediaRepo := mysql.NewMediaRepository(database.DB)
+	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
+	server, err := serverRepo.GetServer(m.GuildID)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
 	messageForDiscord := template.NewMessageSendWrapper()
+	if len(server.ServerName) <= 0 {
+		messageForDiscord.SetForbiddenAccessMessage()
+		s.ChannelMessageSendComplex(m.ChannelID, messageForDiscord.MessageSend)
+		return
+	}
+	
 	messageForDiscord.SetCarlosIsProcessingMessage()
 
 	discordMessage, err := s.ChannelMessageSendComplex(m.ChannelID, messageForDiscord.MessageSend)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	discordInfo := models.JobCheckerQueueMessage{
 		ChannelID: discordMessage.ChannelID,

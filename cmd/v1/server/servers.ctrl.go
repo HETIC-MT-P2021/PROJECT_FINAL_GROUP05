@@ -1,11 +1,11 @@
 package server
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
 	"time"
 
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
@@ -24,15 +24,9 @@ const StatusInternalError = http.StatusInternalServerError
 // @Success 200 {string} string	"GET /servers"
 // @Router /servers [GET]
 func GetServers(c *gin.Context) {
-	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
-	if !ok {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
-		return
-	}
-	
-	commandRepo := mysql.NewCommandRepository(dbConn)
-	mediaRepo := mysql.NewMediaRepository(dbConn)
-	serverRepo := mysql.NewServerRepository(dbConn, commandRepo, mediaRepo)
+	commandRepo := mysql.NewCommandRepository(database.DB)
+	mediaRepo := mysql.NewMediaRepository(database.DB)
+	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
 	servers, err := serverRepo.GetServers()
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get servers")
@@ -52,15 +46,10 @@ func GetServers(c *gin.Context) {
 // @Success 200 {string} string	"GET /servers"
 // @Router /servers/{id} [GET]
 func GetServer(c *gin.Context) {
-	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
-	if !ok {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
-		return
-	}
 	serverID := c.Param("id")
-	commandRepo := mysql.NewCommandRepository(dbConn)
-	mediaRepo := mysql.NewMediaRepository(dbConn)
-	serverRepo := mysql.NewServerRepository(dbConn, commandRepo, mediaRepo)
+	commandRepo := mysql.NewCommandRepository(database.DB)
+	mediaRepo := mysql.NewMediaRepository(database.DB)
+	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
 	server, err := serverRepo.GetServer(serverID)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get server")
@@ -79,12 +68,6 @@ func GetServer(c *gin.Context) {
 // @Success 201 {string} string	"POST /servers"
 // @Router /servers [POST]
 func CreateServer(c *gin.Context) {
-	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
-	if !ok {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
-		return
-	}
-
 	var req models.Server
 	if err := c.BindJSON(&req); err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new server")
@@ -95,9 +78,9 @@ func CreateServer(c *gin.Context) {
 	req.ID = uuid.NewV4().String()
 	req.CreatedAt = time.Unix(time.Now().Unix(), 0).Format("2000-01-01")
 
-	commandRepo := mysql.NewCommandRepository(dbConn)
-	mediaRepo := mysql.NewMediaRepository(dbConn)
-	serverRepo := mysql.NewServerRepository(dbConn, commandRepo, mediaRepo)
+	commandRepo := mysql.NewCommandRepository(database.DB)
+	mediaRepo := mysql.NewMediaRepository(database.DB)
+	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
 	err := serverRepo.CreateServer(req)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new server")
@@ -116,15 +99,9 @@ func CreateServer(c *gin.Context) {
 // @Success 200 {string} string	"GET /servers"
 // @Router /servers/{id}/medias [GET]
 func GetServerMedias(c *gin.Context) {
-	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
-	if !ok {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
-		return
-	}
-	
-	commandRepo := mysql.NewCommandRepository(dbConn)
-	mediaRepo := mysql.NewMediaRepository(dbConn)
-	serverRepo := mysql.NewServerRepository(dbConn, commandRepo, mediaRepo)
+	commandRepo := mysql.NewCommandRepository(database.DB)
+	mediaRepo := mysql.NewMediaRepository(database.DB)
+	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
 
 	serverID := c.Param("id")
 	medias, err := serverRepo.GetServerMedias(serverID)
@@ -145,15 +122,9 @@ func GetServerMedias(c *gin.Context) {
 // @Success 200 {string} string	"GET /servers"
 // @Router /servers/{id}/commands [GET]
 func GetServerCommands(c *gin.Context) {
-	dbConn, ok := c.MustGet("databaseConn").(*sql.DB)
-	if !ok {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to retrieve Database connection")
-		return
-	}
-	
-	commandRepo := mysql.NewCommandRepository(dbConn)
-	mediaRepo := mysql.NewMediaRepository(dbConn)
-	serverRepo := mysql.NewServerRepository(dbConn, commandRepo, mediaRepo)
+	commandRepo := mysql.NewCommandRepository(database.DB)
+	mediaRepo := mysql.NewMediaRepository(database.DB)
+	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
 
 	serverID := c.Param("id")
 	medias, err := serverRepo.GetServerCommands(serverID)
