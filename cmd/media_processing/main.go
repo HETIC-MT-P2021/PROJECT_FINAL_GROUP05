@@ -4,6 +4,8 @@ import (
 	"log"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/commands"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/consumers"
 )
 
@@ -13,6 +15,13 @@ func main() {
 		log.Println(err)
 		return
 	}
+
+	mysqlConnector, err := mysql.Connect()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	database.DB = mysqlConnector
 
 	consumers.MediaProcessingConsumer()
 }

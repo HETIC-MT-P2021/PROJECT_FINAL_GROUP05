@@ -17,6 +17,7 @@ type MediaProcessingQueueMessage struct {
 }
 
 type JobCheckerQueueMessage struct {
+	ServerID					string					`json:"server_id"`
 	ChannelID 				string  				`json:"channel_id"`
 	MessageID  				string 					`json:"message_id"`
 }

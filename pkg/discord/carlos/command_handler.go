@@ -28,6 +28,8 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	log.Println(m.GuildID)
+
 	commandRepo := mysql.NewCommandRepository(database.DB)
 	mediaRepo := mysql.NewMediaRepository(database.DB)
 	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
@@ -52,6 +54,7 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	discordInfo := models.JobCheckerQueueMessage{
+		ServerID: m.GuildID,
 		ChannelID: discordMessage.ChannelID,
 		MessageID: discordMessage.ID,
 	}
