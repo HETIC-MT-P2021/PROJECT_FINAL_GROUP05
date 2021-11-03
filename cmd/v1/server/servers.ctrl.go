@@ -76,10 +76,7 @@ func CreateServer(c *gin.Context) {
 
 	req.CreatedAt = time.Unix(time.Now().Unix(), 0).Format("2000-01-01")
 
-	commandRepo := mysql.NewCommandRepository(database.DB)
-	mediaRepo := mysql.NewMediaRepository(database.DB)
-	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
-	err := serverRepo.CreateServer(req)
+	err := database.ServerRepo.CreateServer(req)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new server")
 		log.Println(err)
@@ -97,12 +94,8 @@ func CreateServer(c *gin.Context) {
 // @Success 200 {string} string	"GET /servers"
 // @Router /servers/{id}/medias [GET]
 func GetServerMedias(c *gin.Context) {
-	commandRepo := mysql.NewCommandRepository(database.DB)
-	mediaRepo := mysql.NewMediaRepository(database.DB)
-	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
-
 	serverID := c.Param("id")
-	medias, err := serverRepo.GetServerMedias(serverID)
+	medias, err := database.ServerRepo.GetServerMedias(serverID)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get medias")
 		log.Println(err)
@@ -120,12 +113,8 @@ func GetServerMedias(c *gin.Context) {
 // @Success 200 {string} string	"GET /servers"
 // @Router /servers/{id}/commands [GET]
 func GetServerCommands(c *gin.Context) {
-	commandRepo := mysql.NewCommandRepository(database.DB)
-	mediaRepo := mysql.NewMediaRepository(database.DB)
-	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
-
 	serverID := c.Param("id")
-	medias, err := serverRepo.GetServerCommands(serverID)
+	medias, err := database.ServerRepo.GetServerCommands(serverID)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get commands")
 		log.Println(err)

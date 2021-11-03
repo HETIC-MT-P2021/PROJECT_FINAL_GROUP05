@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/gin-gonic/gin"
@@ -22,9 +21,7 @@ const StatusInternalError = http.StatusInternalServerError
 // @Success 200 {string} string	"GET /commands"
 // @Router /commands [GET]
 func GetCommands(c *gin.Context) {
-	repo := mysql.NewCommandRepository(database.DB)
-	commands, err := repo.GetCommands()
-
+	commands, err := database.CommandRepo.GetCommands()
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get commands")
 		log.Println(err)
@@ -51,8 +48,7 @@ func UpdateCommand(c *gin.Context) {
 		return
 	}
 	
-	repo := mysql.NewCommandRepository(database.DB)
-	err := repo.UpdateCommand(commandID, req)
+	err := database.CommandRepo.UpdateCommand(commandID, req)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")
 		log.Println(err)
@@ -79,8 +75,7 @@ func UpdateIsActiveCommand(c *gin.Context) {
 		return
 	}
 	
-	repo := mysql.NewCommandRepository(database.DB)
-	err := repo.UpdateIsActiveFieldCommand(commandID, req.IsActive)
+	err := database.CommandRepo.UpdateIsActiveFieldCommand(commandID, req.IsActive)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")
 		log.Println(err)

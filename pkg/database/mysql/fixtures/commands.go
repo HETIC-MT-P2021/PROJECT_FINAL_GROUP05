@@ -3,7 +3,7 @@ package fixtures
 import (
 	"database/sql"
 
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 )
 
@@ -23,9 +23,8 @@ func NewCommands(db *sql.DB) error {
 		ServerID: "2",
 	}
 
-	repo := mysql.NewCommandRepository(db)
-	err := repo.CreateCommand(audioCommand)
-	err = repo.CreateCommand(videoCommand)
+	err := database.CommandRepo.CreateCommand(audioCommand)
+	err = database.CommandRepo.CreateCommand(videoCommand)
 
 	return err
 }

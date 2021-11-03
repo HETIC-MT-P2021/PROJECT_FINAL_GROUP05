@@ -3,7 +3,7 @@ package fixtures
 import (
 	"database/sql"
 
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 )
 
@@ -25,9 +25,8 @@ func NewMedias(db *sql.DB) error {
 		ServerID: "694885041905598545",
 	}
 
-	repo := mysql.NewMediaRepository(db)
-	err := repo.CreateMedia(mediaOne)
-	err = repo.CreateMedia(mediaTwo)
+	err := database.MediaRepo.CreateMedia(mediaOne)
+	err = database.MediaRepo.CreateMedia(mediaTwo)
 
 	return err
 }

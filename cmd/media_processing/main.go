@@ -22,6 +22,9 @@ func main() {
 		return
 	}
 	database.DB = mysqlConnector
+	database.CommandRepo = mysql.NewCommandRepository(mysqlConnector)
+	database.MediaRepo = mysql.NewMediaRepository(mysqlConnector)
+	database.ServerRepo = mysql.NewServerRepository(mysqlConnector, database.CommandRepo, database.MediaRepo)
 
 	consumers.MediaProcessingConsumer()
 }

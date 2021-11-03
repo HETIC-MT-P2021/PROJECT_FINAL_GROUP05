@@ -3,7 +3,7 @@ package fixtures
 import (
 	"database/sql"
 
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 )
 
@@ -21,11 +21,8 @@ func NewServers(db *sql.DB) error {
 		CreatedAt: "2021-02-02",
 	}
 
-	commandRepo := mysql.NewCommandRepository(db)
-	mediaRepo := mysql.NewMediaRepository(db)
-	serverRepo := mysql.NewServerRepository(db, commandRepo, mediaRepo)
-	err := serverRepo.CreateServer(serverOne)
-	err = serverRepo.CreateServer(serverTwo)
+	err := database.ServerRepo.CreateServer(serverOne)
+	err = database.ServerRepo.CreateServer(serverTwo)
 
 	return err
 }

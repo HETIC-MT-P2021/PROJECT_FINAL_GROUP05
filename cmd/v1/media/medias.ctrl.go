@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/gin-gonic/gin"
@@ -37,8 +36,7 @@ func UpdateMedia(c *gin.Context) {
 		return
 	}
 	
-	repo := mysql.NewMediaRepository(database.DB)
-	err = repo.UpdateMedia(mediaIDConverted, req)
+	err = database.MediaRepo.UpdateMedia(mediaIDConverted, req)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update media")
 		log.Println(err)
@@ -71,8 +69,7 @@ func UpdateIsArchivedMedia(c *gin.Context) {
 		return
 	}
 	
-	repo := mysql.NewMediaRepository(database.DB)
-	err = repo.UpdateIsArchivedFieldMedia(mediaIDConverted, req.IsArchived)
+	err = database.MediaRepo.UpdateIsArchivedFieldMedia(mediaIDConverted, req.IsArchived)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update media")
 		log.Println(err)
@@ -99,8 +96,7 @@ func CreateMedia(c *gin.Context) {
 		return
 	}
 
-	mediaRepo := mysql.NewMediaRepository(database.DB)
-	err := mediaRepo.CreateMedia(req)
+	err := database.MediaRepo.CreateMedia(req)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to create new media")
 		log.Println(err)

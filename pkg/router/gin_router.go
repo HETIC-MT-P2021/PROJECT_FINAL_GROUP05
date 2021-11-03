@@ -15,11 +15,15 @@ import (
 func Init() (error, *gin.Engine) {
 	gin.ForceConsoleColor()
 	router := gin.Default()
+
 	mysqlConnector, err := mysql.Connect()
 	if err != nil {
 		return err, nil
 	}
 	database.DB = mysqlConnector
+	database.CommandRepo = mysql.NewCommandRepository(mysqlConnector)
+	database.MediaRepo = mysql.NewMediaRepository(mysqlConnector)
+	database.ServerRepo = mysql.NewServerRepository(mysqlConnector, database.CommandRepo, database.MediaRepo)
 
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
