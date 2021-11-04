@@ -11,6 +11,7 @@ import (
 )
 
 const StatusInternalError = http.StatusInternalServerError
+const StatusNotFoundError = http.StatusNotFound
 
 // GetCommands returns array of commands from database
 // @Summary Get all commands from database
@@ -18,12 +19,13 @@ const StatusInternalError = http.StatusInternalServerError
 // @Tags commands
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"GET /commands"
+// @Success 200 {object} []models.Command
+// @Failure 404 {object} utils.HTTPError "Failed to get commands"
 // @Router /commands [GET]
 func GetCommands(c *gin.Context) {
 	commands, err := database.CommandRepo.GetCommands()
 	if err != nil {
-		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get commands")
+		utils.DisplayErrorMessage(c, StatusNotFoundError, "Failed to get commands")
 		log.Println(err)
 		return
 	}
@@ -36,7 +38,9 @@ func GetCommands(c *gin.Context) {
 // @Tags commands
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"GET /commands"
+// @Param id path int true "Command ID"
+// @Success 200 {object} models.Command
+// @Failure 500 {object} utils.HTTPError "Failed to update command"
 // @Router /commands/{id} [PUT]
 func UpdateCommand(c *gin.Context) {
 	commandID := c.Param("id")
@@ -63,7 +67,9 @@ func UpdateCommand(c *gin.Context) {
 // @Tags commands
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"GET /commands"
+// @Param id path int true "Command ID"
+// @Success 200 {object} models.Command
+// @Failure 500 {object} utils.HTTPError "Failed to update command"
 // @Router /commands/{id} [PATCH]
 func UpdateIsActiveCommand(c *gin.Context) {
 	commandID := c.Param("id")
@@ -81,8 +87,6 @@ func UpdateIsActiveCommand(c *gin.Context) {
 		log.Println(err)
 		return
 	}
-	
-	c.JSON(http.StatusOK, gin.H{
-		"is_active": req.IsActive,
-	})
+
+	c.JSON(http.StatusOK, req)
 }

@@ -1,4 +1,48 @@
 definitions:
+  models.Command:
+    properties:
+      command:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      server_id:
+        type: string
+      title:
+        type: string
+    type: object
+  models.Media:
+    properties:
+      discord_url:
+        type: string
+      id:
+        type: integer
+      is_archived:
+        type: boolean
+      server_id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.Server:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      server_id:
+        type: string
+      server_name:
+        type: string
+    type: object
+  utils.HTTPError:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
   utils.HTTPStatus:
     properties:
       status:
@@ -16,9 +60,15 @@ paths:
       - application/json
       responses:
         "200":
-          description: GET /commands
+          description: OK
           schema:
-            type: string
+            items:
+              $ref: '#/definitions/models.Command'
+            type: array
+        "404":
+          description: Failed to get commands
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
       summary: Get all commands from database
       tags:
       - commands
@@ -26,26 +76,46 @@ paths:
     patch:
       consumes:
       - application/json
+      parameters:
+      - description: Command ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: GET /commands
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/models.Command'
+        "500":
+          description: Failed to update command
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
       summary: update is_active field on a command from database
       tags:
       - commands
     put:
       consumes:
       - application/json
+      parameters:
+      - description: Command ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: GET /commands
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/models.Command'
+        "500":
+          description: Failed to update command
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
       summary: update command from database
       tags:
       - commands
@@ -128,10 +198,14 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: POST /medias
+        "201":
+          description: Created
           schema:
-            type: string
+            $ref: '#/definitions/utils.HTTPStatus'
+        "500":
+          description: Failed to create new media
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
       summary: create media from database
       tags:
       - medias
@@ -139,26 +213,46 @@ paths:
     patch:
       consumes:
       - application/json
+      parameters:
+      - description: Media ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: GET /medias/id
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/models.Media'
+        "500":
+          description: Failed to update media
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
       summary: update is_archived field on a media from database
       tags:
       - medias
     put:
       consumes:
       - application/json
+      parameters:
+      - description: Media ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: GET /medias
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/models.Media'
+        "500":
+          description: Failed to update media
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
       summary: update media from database
       tags:
       - medias
@@ -171,9 +265,15 @@ paths:
       - application/json
       responses:
         "200":
-          description: GET /servers
+          description: OK
           schema:
-            type: string
+            items:
+              $ref: '#/definitions/models.Server'
+            type: array
+        "404":
+          description: Failed to get servers
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
       summary: Get all servers from database
       tags:
       - servers
@@ -184,9 +284,13 @@ paths:
       - application/json
       responses:
         "201":
-          description: POST /servers
+          description: Created
           schema:
-            type: string
+            $ref: '#/definitions/utils.HTTPStatus'
+        "500":
+          description: Failed to create new server
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
       summary: Insert a server with default commands in database
       tags:
       - servers
@@ -195,13 +299,23 @@ paths:
       consumes:
       - application/json
       description: Get server struct with command and media struct
+      parameters:
+      - description: Server ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: GET /servers
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/models.Server'
+        "404":
+          description: Failed to get server
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
       summary: Get server from database
       tags:
       - servers
@@ -209,13 +323,25 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: Server ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: GET /servers
+          description: OK
           schema:
-            type: string
+            items:
+              $ref: '#/definitions/models.Command'
+            type: array
+        "404":
+          description: Failed to get commands
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
       summary: Get all commands of a server from database
       tags:
       - servers
@@ -223,13 +349,25 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: Server ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: GET /servers
+          description: OK
           schema:
-            type: string
+            items:
+              $ref: '#/definitions/models.Media'
+            type: array
+        "404":
+          description: Failed to get medias
+          schema:
+            $ref: '#/definitions/utils.HTTPError'
       summary: Get all medias of a server from database
       tags:
       - servers

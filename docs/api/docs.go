@@ -39,9 +39,18 @@ var doc = `{
                 "summary": "Get all commands from database",
                 "responses": {
                     "200": {
-                        "description": "GET /commands",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Command"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Failed to get commands",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPError"
                         }
                     }
                 }
@@ -59,11 +68,26 @@ var doc = `{
                     "commands"
                 ],
                 "summary": "update command from database",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Command ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "GET /commands",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/models.Command"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update command",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPError"
                         }
                     }
                 }
@@ -79,11 +103,26 @@ var doc = `{
                     "commands"
                 ],
                 "summary": "update is_active field on a command from database",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Command ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "GET /commands",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/models.Command"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update command",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPError"
                         }
                     }
                 }
@@ -214,10 +253,16 @@ var doc = `{
                 ],
                 "summary": "create media from database",
                 "responses": {
-                    "200": {
-                        "description": "POST /medias",
+                    "201": {
+                        "description": "Created",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/utils.HTTPStatus"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to create new media",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPError"
                         }
                     }
                 }
@@ -235,11 +280,26 @@ var doc = `{
                     "medias"
                 ],
                 "summary": "update media from database",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Media ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "GET /medias",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/models.Media"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update media",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPError"
                         }
                     }
                 }
@@ -255,11 +315,26 @@ var doc = `{
                     "medias"
                 ],
                 "summary": "update is_archived field on a media from database",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Media ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "GET /medias/id",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/models.Media"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update media",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPError"
                         }
                     }
                 }
@@ -280,9 +355,18 @@ var doc = `{
                 "summary": "Get all servers from database",
                 "responses": {
                     "200": {
-                        "description": "GET /servers",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Server"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Failed to get servers",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPError"
                         }
                     }
                 }
@@ -300,9 +384,15 @@ var doc = `{
                 "summary": "Insert a server with default commands in database",
                 "responses": {
                     "201": {
-                        "description": "POST /servers",
+                        "description": "Created",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/utils.HTTPStatus"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to create new server",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPError"
                         }
                     }
                 }
@@ -321,11 +411,26 @@ var doc = `{
                     "servers"
                 ],
                 "summary": "Get server from database",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Server ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "GET /servers",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/models.Server"
+                        }
+                    },
+                    "404": {
+                        "description": "Failed to get server",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPError"
                         }
                     }
                 }
@@ -343,11 +448,29 @@ var doc = `{
                     "servers"
                 ],
                 "summary": "Get all commands of a server from database",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Server ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "GET /servers",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Command"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Failed to get commands",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPError"
                         }
                     }
                 }
@@ -365,11 +488,29 @@ var doc = `{
                     "servers"
                 ],
                 "summary": "Get all medias of a server from database",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Server ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "GET /servers",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Media"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Failed to get medias",
+                        "schema": {
+                            "$ref": "#/definitions/utils.HTTPError"
                         }
                     }
                 }
@@ -377,6 +518,74 @@ var doc = `{
         }
     },
     "definitions": {
+        "models.Command": {
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "server_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Media": {
+            "type": "object",
+            "properties": {
+                "discord_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_archived": {
+                    "type": "boolean"
+                },
+                "server_id": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Server": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "server_id": {
+                    "type": "string"
+                },
+                "server_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "utils.HTTPError": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
         "utils.HTTPStatus": {
             "type": "object",
             "properties": {

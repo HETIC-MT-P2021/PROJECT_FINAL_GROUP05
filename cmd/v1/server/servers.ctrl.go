@@ -13,6 +13,7 @@ import (
 )
 
 const StatusInternalError = http.StatusInternalServerError
+const StatusNotFoundError = http.StatusNotFound
 
 // GetServers returns array of server from database
 // @Summary Get all servers from database
@@ -20,7 +21,8 @@ const StatusInternalError = http.StatusInternalServerError
 // @Tags servers
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"GET /servers"
+// @Success 200 {object} []models.Server
+// @Failure 404 {object} utils.HTTPError "Failed to get servers"
 // @Router /servers [GET]
 func GetServers(c *gin.Context) {
 	commandRepo := mysql.NewCommandRepository(database.DB)
@@ -42,14 +44,13 @@ func GetServers(c *gin.Context) {
 // @Tags servers
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"GET /servers"
+// @Param id path int true "Server ID"
+// @Success 200 {object} models.Server
+// @Failure 404 {object} utils.HTTPError "Failed to get server"
 // @Router /servers/{id} [GET]
 func GetServer(c *gin.Context) {
 	serverID := c.Param("id")
-	commandRepo := mysql.NewCommandRepository(database.DB)
-	mediaRepo := mysql.NewMediaRepository(database.DB)
-	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
-	server, err := serverRepo.GetServer(serverID)
+	server, err := database.ServerRepo.GetServer(serverID)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to get server")
 		log.Println(err)
@@ -64,7 +65,8 @@ func GetServer(c *gin.Context) {
 // @Tags servers
 // @Accept  json
 // @Produce  json
-// @Success 201 {string} string	"POST /servers"
+// @Success 201 {object} utils.HTTPStatus	"Created"
+// @Failure 500 {object} utils.HTTPError "Failed to create new server"
 // @Router /servers [POST]
 func CreateServer(c *gin.Context) {
 	var req models.Server
@@ -83,7 +85,9 @@ func CreateServer(c *gin.Context) {
 		return
 	}
 	
-	c.JSON(http.StatusCreated, req)
+	c.JSON(http.StatusCreated, gin.H{
+		"status": "Created",
+	})
 }
 
 // GetServerMedias returns array of medias from database
@@ -91,7 +95,9 @@ func CreateServer(c *gin.Context) {
 // @Tags servers
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"GET /servers"
+// @Param id path int true "Server ID"
+// @Success 200 {object} []models.Media
+// @Failure 404 {object} utils.HTTPError "Failed to get medias"
 // @Router /servers/{id}/medias [GET]
 func GetServerMedias(c *gin.Context) {
 	serverID := c.Param("id")
@@ -110,7 +116,9 @@ func GetServerMedias(c *gin.Context) {
 // @Tags servers
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"GET /servers"
+// @Param id path int true "Server ID"
+// @Success 200 {object} []models.Command
+// @Failure 404 {object} utils.HTTPError "Failed to get commands"
 // @Router /servers/{id}/commands [GET]
 func GetServerCommands(c *gin.Context) {
 	serverID := c.Param("id")

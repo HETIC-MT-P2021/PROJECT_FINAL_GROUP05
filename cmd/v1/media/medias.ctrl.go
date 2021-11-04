@@ -18,7 +18,9 @@ const StatusInternalError = http.StatusInternalServerError
 // @Tags medias
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"GET /medias"
+// @Param id path int true "Media ID"
+// @Success 200 {object} models.Media
+// @Failure 500 {object} utils.HTTPError "Failed to update media"
 // @Router /medias/{id} [PUT]
 func UpdateMedia(c *gin.Context) {
 	mediaID := c.Param("id")
@@ -51,7 +53,9 @@ func UpdateMedia(c *gin.Context) {
 // @Tags medias
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"GET /medias/id"
+// @Param id path int true "Media ID"
+// @Success 200 {object} models.Media
+// @Failure 500 {object} utils.HTTPError "Failed to update media"
 // @Router /medias/{id} [PATCH]
 func UpdateIsArchivedMedia(c *gin.Context) {
 	mediaID := c.Param("id")
@@ -76,9 +80,7 @@ func UpdateIsArchivedMedia(c *gin.Context) {
 		return
 	}
 	
-	c.JSON(http.StatusOK, gin.H{
-		"is_archived": req.IsArchived,
-	})
+	c.JSON(http.StatusOK, req)
 }
 
 // CreateMedia from database
@@ -86,7 +88,8 @@ func UpdateIsArchivedMedia(c *gin.Context) {
 // @Tags medias
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"POST /medias"
+// @Success 201 {object} utils.HTTPStatus	"Created"
+// @Failure 500 {object} utils.HTTPError "Failed to create new media"
 // @Router /medias [POST]
 func CreateMedia(c *gin.Context) {
 	var req models.Media
@@ -103,5 +106,7 @@ func CreateMedia(c *gin.Context) {
 		return
 	}
 	
-	c.JSON(http.StatusCreated, req)
+	c.JSON(http.StatusCreated, gin.H{
+		"status": "Created",
+	})
 }
