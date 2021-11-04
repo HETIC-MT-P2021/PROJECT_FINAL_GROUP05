@@ -5,7 +5,6 @@ import (
 	"regexp"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord/carlos/template"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/producers"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
@@ -30,10 +29,7 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	log.Println(m.GuildID)
 
-	commandRepo := mysql.NewCommandRepository(database.DB)
-	mediaRepo := mysql.NewMediaRepository(database.DB)
-	serverRepo := mysql.NewServerRepository(database.DB, commandRepo, mediaRepo)
-	server, err := serverRepo.GetServer(m.GuildID)
+	server, err := database.ServerRepo.GetServer(m.GuildID)
 	if err != nil {
 		log.Println(err)
 		return

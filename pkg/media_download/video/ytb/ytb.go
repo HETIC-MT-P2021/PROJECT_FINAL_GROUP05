@@ -1,6 +1,7 @@
 package ytb
 
 import (
+	"log"
 	"regexp"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
@@ -26,7 +27,17 @@ func (dl *ytbDownloadRepo) Download(youtubeURL string) (error, string) {
 		return err, ""
 	}
 
+	log.Println("videoID")
+	log.Println(videoID)
+
+	log.Println("video")
+	log.Println(video)
+
 	formats := video.Formats.Quality(utils.VIDEO_QUALITY).WithAudioChannels()
+
+	log.Println("formats")
+	log.Println(formats)
+
 	stream, _, err := dl.Client.GetStream(video, &formats[0])
 	if err != nil {
 		return err, ""
