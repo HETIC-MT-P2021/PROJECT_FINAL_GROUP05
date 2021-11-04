@@ -1,7 +1,6 @@
 package ytb
 
 import (
-	"log"
 	"regexp"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
@@ -19,42 +18,42 @@ func NewDownloadRepository(client youtube.Client) *ytbDownloadRepo {
 	}
 }
 
-// DownloadVideo and store into "downloads" folder
+// Download and store into "downloads" folder
 func (dl *ytbDownloadRepo) Download(youtubeURL string) (error, string) {
+	var formats youtube.FormatList
 	videoID := dl.getVideoID(youtubeURL)
+
 	video, err := dl.Client.GetVideo(videoID)
 	if err != nil {
 		return err, ""
 	}
 
-	log.Println("videoID")
-	log.Println(videoID)
+	formats = video.Formats.Quality(utils.VIDEO_QUALITY).WithAudioChannels()
 
-	log.Println("video")
-	log.Println(video)
-
-	formats := video.Formats.Quality(utils.VIDEO_QUALITY).WithAudioChannels()
-
-	log.Println("formats")
-	log.Println(formats)
+	if len(formats) < 1 {
+		formats = video.Formats.WithAudioChannels()
+		if len(formats) < 1 {
+			return err, ""
+		}
+	}
 
 	stream, _, err := dl.Client.GetStream(video, &formats[0])
 	if err != nil {
 		return err, ""
 	}
 
-	return utils.CreateMedia("mp4", stream) 
+	return utils.CreateMedia("mp4", stream)
 }
 
 const (
 	DefaultYoutubeURL = `^https:\/\/www.youtube\.com\/watch\?v=`
-	SharedYoutubeURL = `^https:\/\/youtu\.be\/`
+	SharedYoutubeURL  = `^https:\/\/youtu\.be\/`
 )
 
 // getVideoID looking for DefaultYoutubeURL or SharedYoutubeURL on youtube url
 func (dl *ytbDownloadRepo) getVideoID(youtubeURL string) string {
 	defaultUrl := regexp.MustCompile(DefaultYoutubeURL)
-	sharedUrl := regexp.MustCompile(DefaultYoutubeURL)
+	sharedUrl := regexp.MustCompile(SharedYoutubeURL)
 
 	videoID := defaultUrl.ReplaceAll([]byte(youtubeURL), []byte(""))
 	videoID = sharedUrl.ReplaceAll(videoID, []byte(""))

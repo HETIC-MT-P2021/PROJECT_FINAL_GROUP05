@@ -17,8 +17,8 @@ var (
 )
 
 const (
-	RegexFindType   = `^([\w\-]+)`
-	RegexFindParams      = `(?m)-. ([^\s]+)`
+	RegexFindType        = `^([\w\-]+)`
+	RegexFindParams      = `(?m)-.\s*([^\s]+)`
 	RegexFindParamsValue = `(?m)(?P<value> (.*?)$)`
 )
 
