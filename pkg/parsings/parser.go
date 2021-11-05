@@ -9,22 +9,19 @@ import (
 )
 
 var (
-	mediaType              string
-	message                models.DownloadQueueMessage
-	startParamInSeconds    int
-	durationParamInSeconds int
-	inputUriParam          string
+	inputUriParam string
 )
 
 const (
-	RegexFindType   = `^([\w\-]+)`
-	RegexFindParams      = `(?m)-. ([^\s]+)`
-	RegexFindParamsValue = `(?m)(?P<value> (.*?)$)`
+	RegexFindType         = `^(\/[\w\-]+)`
+	RegexFindParams       = `(?m)-.\s*([^\s]+)`
+	RegexFindParamsValue  = `(?m)(?P<value> (.*?)$)`
+	RegexFindOptionsValue = `(?:-options)(?:\s)+(?P<Filter>[a-z ]+)`
 )
 
 func getTypeFromString(input string) string {
 	typeRegex := regexp.MustCompile(RegexFindType)
-	mediaType = typeRegex.FindString(input)
+	mediaType := typeRegex.FindString(input)
 	return mediaType
 }
 
@@ -34,8 +31,11 @@ func getParamsFromString(input string) []string {
 }
 
 func getOptionsFromString(input string) models.Options {
+	var startParamInSeconds int
+	var durationParamInSeconds int
 	var params = getParamsFromString(input)
 	var options models.Options
+	var filters []string
 
 	reValue := regexp.MustCompile(RegexFindParamsValue)
 
@@ -57,12 +57,28 @@ func getOptionsFromString(input string) models.Options {
 		}
 	}
 
+	filters = getFilterFromString(input)
+
 	options.DurationInSeconds = durationParamInSeconds
 	options.StartInSeconds = startParamInSeconds
+	options.Filters = filters
 	return options
 }
 
+func getFilterFromString(input string) []string {
+	var regexFilter = regexp.MustCompile(RegexFindOptionsValue)
+	match := regexFilter.FindStringSubmatch(input)
+	filter := regexFilter.SubexpIndex("Filter")
+	return strings.Fields(match[filter])
+}
+
 func ParseCommand(inputString string) models.DownloadQueueMessage {
+	var message models.DownloadQueueMessage
+
+	if inputUriParam != "" {
+		inputUriParam = ""
+	}
+
 	getOptionsFromString(inputString)
 	message.Type = getTypeFromString(inputString)
 

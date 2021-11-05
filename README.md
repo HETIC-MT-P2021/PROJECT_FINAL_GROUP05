@@ -13,6 +13,24 @@ This bot allows users in discord servers, edit and share medias from videos to a
 
 Don't forget to read/use commits and PR conventions before doing any change !
 
+## Start project
+
+```sh
+$ docker-compose up --build
+```
+
+```sh
+$ docker exec -i db sh -c 'exec mysql -ugoproject -p"$MYSQL_PASSWORD"' < ./build/data/init.sql
+```
+
+To fill data in database, make the following HTTP request
+
+**POST localhost:8080/api/v1/fixtures**
+
+Now by executing the following HTTP request, data should be returned
+
+**GET localhost:8080/api/v1/servers**
+
 ## Docs 📄
 
 You can find our docs folder [here](https://github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/tree/main/docs)

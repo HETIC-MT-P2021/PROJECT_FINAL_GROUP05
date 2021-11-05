@@ -7,7 +7,7 @@ import (
 )
 
 func DownloadConsumer() {
-	err, chanel, queue := rabbit.ConnectToRabbitMQ(rabbit.DOWLOAD_QUEUE_NAME)
+	err, channel, queue := rabbit.ConnectToRabbitMQ(rabbit.DOWLOAD_QUEUE_NAME)
 	if err != nil {
 		log.Println(err)
 		return
@@ -15,6 +15,6 @@ func DownloadConsumer() {
 
 	action := NewCallMediaProcessingProducer()
 
-	rabbitImpl := rabbit.NewRabbitRepository(chanel, queue)
+	rabbitImpl := rabbit.NewRabbitRepository(channel, queue)
 	rabbitImpl.Consume(action)
 }

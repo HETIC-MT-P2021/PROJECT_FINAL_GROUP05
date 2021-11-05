@@ -11,40 +11,69 @@ type mysqlCommandRepo struct {
 	Conn *sql.DB
 }
 
-// NewCommandsRepository creates new mysqlCommandRepo
-func NewCommandsRepository(conn *sql.DB) *mysqlCommandRepo {
+// NewCommandRepository creates new mysqlCommandRepo
+func NewCommandRepository(conn *sql.DB) *mysqlCommandRepo {
 	return &mysqlCommandRepo{
 		Conn: conn,
 	}
 }
 
-// GetUserFromUsername to create command from bdd
-func (db *mysqlCommandRepo) CreateCommand(command models.Command) error {
-	tx, err := db.Conn.Begin()
-	if err != nil {
-		return err
-	}
-
-	stmt, err := tx.Prepare(query.QUERY_CREATE_COMMAND)
+// CreateCommand to create command from bdd
+func (repo *mysqlCommandRepo) CreateCommand(command models.Command) error {
+	stmt, err := repo.Conn.Prepare(query.QUERY_CREATE_COMMAND)
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	if _, err := stmt.Exec(command.Title, command.Command, command.IsChecked); err != nil {
-		return err
-	}
-
-	if err := tx.Commit(); err != nil {
+	if _, err := stmt.Exec(
+		command.Title,
+		command.Command,
+		command.IsActive,
+		command.ServerID); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-// GetUserFromUsername to retrieve commands from bdd
-func (db *mysqlCommandRepo) GetCommands() ([]models.Command, error) {
-	results, err := db.Conn.Query(query.QUERY_FIND_COMMANDS)
+var DefaultCommand []models.Command = []models.Command {
+	models.Command{
+		Title: "Extrait vidéo",
+		Command: "video -s 'X' -d 'Y' -i 'input'",		
+		IsActive: true,
+	},
+	models.Command{
+		Title: "Extrait audio",
+		Command: "audio -s 'X' -d 'Y' -i 'input'",		
+		IsActive: true,
+	},
+}
+
+func (repo *mysqlCommandRepo) CreateDefaultCommandsInServer(serverID string) error {
+	for _, command := range DefaultCommand {
+		stmt, err := repo.Conn.Prepare(query.QUERY_CREATE_COMMAND)
+		if err != nil {
+			return err
+		}
+		defer stmt.Close()
+	
+		if _, err := stmt.Exec(
+			command.Title,
+			command.Command,
+			command.IsActive,
+			serverID); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+
+// GetCommands to retrieve commands from bdd
+func (repo *mysqlCommandRepo) GetCommands() ([]models.Command, error) {
+	results, err := repo.Conn.Query(query.QUERY_FIND_COMMANDS)
 	if err != nil {
 		return []models.Command{}, err
 	}
@@ -53,12 +82,47 @@ func (db *mysqlCommandRepo) GetCommands() ([]models.Command, error) {
 
 	for results.Next() {
 		var cmd models.Command
-		err = results.Scan(&cmd.Title, &cmd.Command, &cmd.IsChecked)
+		err = results.Scan(&cmd.Title, &cmd.Command, &cmd.IsActive, &cmd.ServerID)
 		if err != nil {
 			return []models.Command{}, err
 		}
 		commands = append(commands, cmd)
-}
+	}
 
 	return commands, nil
+}
+
+// UpdateCommand to update command info from bdd
+func (repo *mysqlCommandRepo) UpdateCommand(commandID string, command models.Command) error {
+	stmt, err := repo.Conn.Prepare(query.QUERY_UPDATE_COMMAND)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(
+		command.Title,
+		command.Command,
+		command.IsActive,
+		command.ServerID,
+		commandID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// UpdateIsActiveFieldCommand to update command field called is_active from bdd
+func (repo *mysqlCommandRepo) UpdateIsActiveFieldCommand(commandID string, isActive bool) error {
+	stmt, err := repo.Conn.Prepare(query.QUERY_UPDATE_FIELD_IS_ACTIVE_COMMAND)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(isActive, commandID); err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -12,6 +12,7 @@ import (
 
 type CarlosBot struct {
 	Session 		*discordgo.Session
+	ServerID 		string
 	ChannelID 	string
 	MessageID 	string
 }
@@ -70,21 +71,20 @@ func (bot *CarlosBot) StopBot() {
 	bot.Session.Close()
 }
 
-func (bot *CarlosBot) UpdateCarlosIsProcessingMessage(fileName string) error {
+func (bot *CarlosBot) UpdateCarlosIsProcessingMessage(fileName string) (*discordgo.Message, error) {
 	err := bot.Session.ChannelMessageDelete(bot.ChannelID, bot.MessageID)
 	if err != nil {
-		return err
+		return &discordgo.Message{}, err
 	}
 	path := os.Getenv("DOCKER_CONTAINER_PATH")
 	file, err := os.Open(fmt.Sprintf("%sedit-%s", path, fileName))
 	if err != nil {
-		return err
+		return &discordgo.Message{}, err
 	}
   defer file.Close()
 
 	messageForDiscord := template.NewMessageSendWrapper()
 	messageForDiscord.SetFile(fileName, file)
 
-	_, err = bot.Session.ChannelMessageSendComplex(bot.ChannelID, messageForDiscord.MessageSend)
-	return err
+	return bot.Session.ChannelMessageSendComplex(bot.ChannelID, messageForDiscord.MessageSend)
 }
