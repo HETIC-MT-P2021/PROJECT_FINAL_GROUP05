@@ -10,6 +10,7 @@ import (
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/media_download/video/ytb"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/producers"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/kkdai/youtube/v2"
 )
 
@@ -82,11 +83,14 @@ func (producer *MediaProcessingAction) Execute() error {
 	message, err := carlosBot.UpdateCarlosIsProcessingMessage(processingMessage.FileName)
 
 	mediaRepo := mysql.NewMediaRepository(database.DB)
+	now := utils.NewDateNow()
 	media := models.Media{
 		DiscordUrl: message.Attachments[0].URL,
 		IsArchived: true,
 		UserID: message.Author.ID,
 		ServerID: processingMessage.DiscordInfo.ServerID,
+		CreatedAt: now,
+		UpdatedAt: now,
 	}
 	return mediaRepo.CreateMedia(media)
 }
