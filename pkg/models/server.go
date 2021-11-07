@@ -5,6 +5,7 @@ type Server struct {
 	ServerID 			string 		`json:"server_id"`
 	ServerName 		string 		`json:"server_name"`
   CreatedAt 		string 		`json:"created_at"`
+  UpdatedAt 		string 		`json:"updated_at"`
 }
 
 type ServerCommandsAndMedias struct {
@@ -12,6 +13,7 @@ type ServerCommandsAndMedias struct {
 	ServerID 			string 		`json:"server_id"`
 	ServerName 		string 		`json:"server_name"`
   CreatedAt 		string 		`json:"created_at"`
+  UpdatedAt 		string 		`json:"updated_at"`
 	Commands 			[]Command `json:"commands"`
 	Medias 				[]Media 	`json:"medias"`
 }

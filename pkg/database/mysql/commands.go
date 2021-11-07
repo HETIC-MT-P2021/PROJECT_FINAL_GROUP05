@@ -5,6 +5,7 @@ import (
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql/query"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 )
 
 type mysqlCommandRepo struct {
@@ -30,6 +31,8 @@ func (repo *mysqlCommandRepo) CreateCommand(command models.Command) error {
 		command.Title,
 		command.Command,
 		command.IsActive,
+		command.CreatedAt,
+		command.UpdatedAt,
 		command.ServerID); err != nil {
 		return err
 	}
@@ -42,11 +45,15 @@ var DefaultCommand []models.Command = []models.Command {
 		Title: "Extrait vidéo",
 		Command: "video -s 'X' -d 'Y' -i 'input'",		
 		IsActive: true,
+		CreatedAt: utils.NewDateNow(),
+		UpdatedAt: utils.NewDateNow(),
 	},
 	models.Command{
 		Title: "Extrait audio",
 		Command: "audio -s 'X' -d 'Y' -i 'input'",		
 		IsActive: true,
+		CreatedAt: utils.NewDateNow(),
+		UpdatedAt: utils.NewDateNow(),
 	},
 }
 
@@ -62,7 +69,9 @@ func (repo *mysqlCommandRepo) CreateDefaultCommandsInServer(serverID string) err
 			command.Title,
 			command.Command,
 			command.IsActive,
-			serverID); err != nil {
+			serverID,
+			command.CreatedAt,
+			command.UpdatedAt); err != nil {
 			return err
 		}
 	}
@@ -82,7 +91,13 @@ func (repo *mysqlCommandRepo) GetCommands() ([]models.Command, error) {
 
 	for results.Next() {
 		var cmd models.Command
-		err = results.Scan(&cmd.Title, &cmd.Command, &cmd.IsActive, &cmd.ServerID)
+		err = results.Scan(
+			&cmd.Title,
+			&cmd.Command,
+			&cmd.IsActive,
+			&cmd.ServerID,
+			&cmd.CreatedAt,
+			&cmd.UpdatedAt)
 		if err != nil {
 			return []models.Command{}, err
 		}
@@ -105,6 +120,7 @@ func (repo *mysqlCommandRepo) UpdateCommand(commandID string, command models.Com
 		command.Command,
 		command.IsActive,
 		command.ServerID,
+		&command.UpdatedAt,
 		commandID); err != nil {
 		return err
 	}
@@ -120,7 +136,7 @@ func (repo *mysqlCommandRepo) UpdateIsActiveFieldCommand(commandID string, isAct
 	}
 	defer stmt.Close()
 
-	if _, err := stmt.Exec(isActive, commandID); err != nil {
+	if _, err := stmt.Exec(isActive, utils.NewDateNow(), commandID); err != nil {
 		return err
 	}
 

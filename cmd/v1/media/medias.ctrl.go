@@ -38,6 +38,7 @@ func UpdateMedia(c *gin.Context) {
 		return
 	}
 	
+	req.UpdatedAt = utils.NewDateNow()
 	err = database.MediaRepo.UpdateMedia(mediaIDConverted, req)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update media")
@@ -72,7 +73,8 @@ func UpdateIsArchivedMedia(c *gin.Context) {
 		log.Println(err)
 		return
 	}
-	
+
+	req.UpdatedAt = utils.NewDateNow()
 	err = database.MediaRepo.UpdateIsArchivedFieldMedia(mediaIDConverted, req.IsArchived)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update media")
@@ -98,6 +100,10 @@ func CreateMedia(c *gin.Context) {
 		log.Println(err)
 		return
 	}
+
+	now := utils.NewDateNow()
+	req.CreatedAt = now
+	req.UpdatedAt = now
 
 	err := database.MediaRepo.CreateMedia(req)
 	if err != nil {

@@ -52,6 +52,7 @@ func UpdateCommand(c *gin.Context) {
 		return
 	}
 	
+	req.UpdatedAt = utils.NewDateNow()
 	err := database.CommandRepo.UpdateCommand(commandID, req)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")
@@ -81,6 +82,7 @@ func UpdateIsActiveCommand(c *gin.Context) {
 		return
 	}
 	
+	req.UpdatedAt = utils.NewDateNow()
 	err := database.CommandRepo.UpdateIsActiveFieldCommand(commandID, req.IsActive)
 	if err != nil {
 		utils.DisplayErrorMessage(c, StatusInternalError, "Failed to update command")

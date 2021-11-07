@@ -3,7 +3,6 @@ package server
 import (
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
@@ -76,7 +75,9 @@ func CreateServer(c *gin.Context) {
 		return
 	}
 
-	req.CreatedAt = time.Unix(time.Now().Unix(), 0).Format("2000-01-01")
+	now := utils.NewDateNow()
+	req.CreatedAt = now
+	req.UpdatedAt = now
 
 	err := database.ServerRepo.CreateServer(req)
 	if err != nil {

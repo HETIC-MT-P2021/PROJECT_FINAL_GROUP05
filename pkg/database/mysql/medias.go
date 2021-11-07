@@ -5,6 +5,7 @@ import (
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql/query"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
+	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 )
 
 type mysqlMediaRepo struct {
@@ -29,7 +30,9 @@ func (repo *mysqlMediaRepo) CreateMedia(media models.Media) error {
 		media.DiscordUrl,
 		media.IsArchived,
 		media.UserID,
-		media.ServerID); err != nil {
+		media.ServerID,
+		media.CreatedAt,
+		media.UpdatedAt); err != nil {
 		return err
 	}
 
@@ -47,6 +50,7 @@ func (repo *mysqlMediaRepo) UpdateMedia(mediaID int, media models.Media) error {
 		media.DiscordUrl,
 		media.IsArchived,
 		media.UserID,
+		media.UpdatedAt,
 		mediaID); err != nil {
 		return err
 	}
@@ -62,7 +66,7 @@ func (repo *mysqlMediaRepo) UpdateIsArchivedFieldMedia(mediaID int, isArchived b
 	}
 	defer stmt.Close()
 
-	if _, err := stmt.Exec(isArchived, mediaID); err != nil {
+	if _, err := stmt.Exec(isArchived, utils.NewDateNow(), mediaID); err != nil {
 		return err
 	}
 
