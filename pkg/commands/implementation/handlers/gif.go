@@ -25,7 +25,7 @@ func (cHandler VideoGIFCommandHandler) Handle(command logic.Command) error {
 	switch command.Payload().(type) {
 	case *implementation.VideoGIFCommand:
 		message := command.Payload().(*implementation.VideoGIFCommand).Message
-		return cHandler.Repo.MakeVideoClip(message)
+		return cHandler.Repo.MakeGIF(message)
 	default:
 		return errors.New("bad command type")
 	}

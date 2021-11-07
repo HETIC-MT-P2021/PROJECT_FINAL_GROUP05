@@ -2,6 +2,7 @@ package consumers
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/commands"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
@@ -80,7 +81,8 @@ func (producer *MediaProcessingAction) Execute() error {
 	carlosBot.ChannelID = processingMessage.DiscordInfo.ChannelID
 	carlosBot.ServerID = processingMessage.DiscordInfo.ServerID
 	carlosBot.MessageID = processingMessage.DiscordInfo.MessageID
-	message, err := carlosBot.UpdateCarlosIsProcessingMessage(processingMessage.FileName)
+	fileName := strings.Replace(processingMessage.FileName, ".mp4", ".gif", -1)
+	message, err := carlosBot.UpdateCarlosIsProcessingMessage(fileName)
 
 	mediaRepo := mysql.NewMediaRepository(database.DB)
 	now := utils.NewDateNow()

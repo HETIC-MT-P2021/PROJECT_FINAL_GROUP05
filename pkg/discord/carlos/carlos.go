@@ -76,7 +76,7 @@ func (bot *CarlosBot) UpdateCarlosIsProcessingMessage(fileName string) (*discord
 	if err != nil {
 		return &discordgo.Message{}, err
 	}
-	path := os.Getenv("DOCKER_CONTAINER_PATH")
+	path := fmt.Sprintf("%sdownloads", os.Getenv("BASE_DIR_IN_CONTAINER"))
 	file, err := os.Open(fmt.Sprintf("%sedit-%s", path, fileName))
 	if err != nil {
 		return &discordgo.Message{}, err

@@ -15,9 +15,9 @@ func Dispatch(message *models.MediaProcessingQueueMessage) error {
 		})
 		break
 	case "wm":
-		/*command = logic.NewCommandImpl(&implementation.ImageCommand{
+		command = logic.NewCommandImpl(&implementation.VideoWMCommand{
 			Message: message,
-		})*/
+		})
 		break
 	default:
 		command = logic.NewCommandImpl(&implementation.VideoNoneCommand{

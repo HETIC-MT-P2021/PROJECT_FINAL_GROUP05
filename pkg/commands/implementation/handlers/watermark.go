@@ -25,7 +25,7 @@ func (cHandler VideoWMCommandHandler) Handle(command logic.Command) error {
 	switch command.Payload().(type) {
 	case *implementation.VideoWMCommand:
 		message := command.Payload().(*implementation.VideoWMCommand).Message
-		return cHandler.Repo.MakeVideoClip(message)
+		return cHandler.Repo.MakeWaterMark(message)
 	default:
 		return errors.New("bad command type")
 	}
