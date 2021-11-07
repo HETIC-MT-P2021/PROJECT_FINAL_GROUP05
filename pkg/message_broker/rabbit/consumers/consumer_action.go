@@ -2,16 +2,12 @@ package consumers
 
 import (
 	"encoding/json"
-	"strings"
 
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/commands"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/database/mysql"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/discord/carlos"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/media_download/video/ytb"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/message_broker/rabbit/producers"
 	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/models"
-	"github.com/HETIC-MT-P2021/PROJECT_FINAL_GROUP05/pkg/utils"
 	"github.com/kkdai/youtube/v2"
 )
 
@@ -67,11 +63,6 @@ func (producer *MediaProcessingAction) Execute() error {
 		return err
 	}
 
-	err = commands.Dispatch(processingMessage)
-	if err != nil {
-		return err
-	}
-	
 	carlosBot := carlos.NewDiscordRepository()
 	err = carlosBot.InitBotWithoutHandler()
 	if err != nil {
@@ -81,20 +72,18 @@ func (producer *MediaProcessingAction) Execute() error {
 	carlosBot.ChannelID = processingMessage.DiscordInfo.ChannelID
 	carlosBot.ServerID = processingMessage.DiscordInfo.ServerID
 	carlosBot.MessageID = processingMessage.DiscordInfo.MessageID
-	fileName := strings.Replace(processingMessage.FileName, ".mp4", ".gif", -1)
-	message, err := carlosBot.UpdateCarlosIsProcessingMessage(fileName)
 
-	mediaRepo := mysql.NewMediaRepository(database.DB)
-	now := utils.NewDateNow()
-	media := models.Media{
-		DiscordUrl: message.Attachments[0].URL,
-		IsArchived: true,
-		UserID: message.Author.ID,
-		ServerID: processingMessage.DiscordInfo.ServerID,
-		CreatedAt: now,
-		UpdatedAt: now,
+	dispatch := commands.DispatchParams{
+		Message: processingMessage,
+		DiscordBot: carlosBot,
 	}
-	return mediaRepo.CreateMedia(media)
+
+	err = commands.Dispatch(dispatch)
+	if err != nil {
+		return err
+	}
+	
+	return nil
 }
 
 func (producer *MediaProcessingAction) SetBody(body []byte) {

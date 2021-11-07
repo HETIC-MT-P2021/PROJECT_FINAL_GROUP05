@@ -18,7 +18,7 @@ func NewVideoCommandRepository() *FfmpegCommandRepo {
 }
 
 func (cmd *FfmpegCommandRepo) MakeVideoClip(processing *models.MediaProcessingQueueMessage) error {
-	path := fmt.Sprintf("%sdownloads", os.Getenv("BASE_DIR_IN_CONTAINER"))
+	path := fmt.Sprintf("%sdownloads/", os.Getenv("BASE_DIR_IN_CONTAINER"))
 	if len(path) <= 0 {
 		return errors.New("Path not found")
 	}
@@ -33,7 +33,7 @@ func (cmd *FfmpegCommandRepo) MakeVideoClip(processing *models.MediaProcessingQu
 }
 
 func (cmd *FfmpegCommandRepo) MakeGIF(processing *models.MediaProcessingQueueMessage) error {
-	path := fmt.Sprintf("%sdownloads", os.Getenv("BASE_DIR_IN_CONTAINER"))
+	path := fmt.Sprintf("%sdownloads/", os.Getenv("BASE_DIR_IN_CONTAINER"))
 	if len(path) <= 0 {
 		return errors.New("Path not found")
 	}
@@ -55,12 +55,17 @@ func (cmd *FfmpegCommandRepo) MakeGIF(processing *models.MediaProcessingQueueMes
 }
 
 func (cmd *FfmpegCommandRepo) MakeWaterMark(processing *models.MediaProcessingQueueMessage) error {
-	downloadPath := fmt.Sprintf("%sdownloads", os.Getenv("BASE_DIR_IN_CONTAINER"))
-	assetsPath := fmt.Sprintf("%sassets", os.Getenv("BASE_DIR_IN_CONTAINER"))
-	if len(downloadPath) <= 0 || len(assetsPath) <= 0 {
-		return errors.New("Path not found")
+	/*downloadPath := fmt.Sprintf("%sdownloads/", os.Getenv("BASE_DIR_IN_CONTAINER"))
+	if _, err := os.Stat(downloadPath); os.IsNotExist(err) {
+		return errors.New("File not found")
 	}
 
+	assetsPath := fmt.Sprintf("%sassets/", os.Getenv("BASE_DIR_IN_CONTAINER"))
+	if _, err := os.Stat(assetsPath); os.IsNotExist(err) {
+		return errors.New("File not found")
+	}
+
+	
 	overlay := ffmpeg.Input(fmt.Sprintf("%scarlos_logo.png", assetsPath)).
 		Filter("scale", ffmpeg.Args{"64:-1"})
 	return ffmpeg.Filter(
@@ -69,5 +74,6 @@ func (cmd *FfmpegCommandRepo) MakeWaterMark(processing *models.MediaProcessingQu
         overlay,
     }, "overlay", ffmpeg.Args{"10:10"}, ffmpeg.KwArgs{"enable": "gte(t,1)"}).
     Output(fmt.Sprintf("%sedit-%s", downloadPath, processing.FileName)).
-		OverWriteOutput().Run()
+		OverWriteOutput().Run()*/
+	return nil
 }
