@@ -35,8 +35,8 @@ jobs:
       # Run vet & lint on the code
       - name: Run vet & lint
         run: |
-          go vet .
-          golint .
+          go vet ./cmd/app
+          go vet ./cmd/v1/v1.go
 
       # Run testing on the code
       # - name: Run testing
