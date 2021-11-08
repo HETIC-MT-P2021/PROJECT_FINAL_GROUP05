@@ -21,24 +21,22 @@ jobs:
           go-version: 1.17
         id: go
 
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
-
-      - name: Get dependencies
+       # Install all the dependencies
+      - name: Install dependencies
         run: |
-          go get -v -t -d ./...
-          if [ -f Gopkg.toml ]; then
-              curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-              dep ensure
-          fi
-          
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
-        
-      - name: Build
-        run: go build -v .
+          go version
+          go get -u golang.org/x/lint/golint
 
-      # Add it when tests will be written
-      #- name: Test
-      #  working-directory: ./back
-      #  run: go test -v ./test
+      # Run build of the application
+      - name: Run build
+        run: go build . 
+
+      # Run vet & lint on the code
+      - name: Run vet & lint
+        run: |
+          go vet .
+          golint .
+
+      # Run testing on the code
+      # - name: Run testing
+       # run: cd test && go test -v
