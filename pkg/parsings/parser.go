@@ -16,7 +16,7 @@ const (
 	RegexFindType         = `^(\/[\w\-]+)`
 	RegexFindParams       = `(?m)-.\s*([^\s]+)`
 	RegexFindParamsValue  = `(?m)(?P<value> (.*?)$)`
-	RegexFindOptionsValue = `(?:-options)(?:\s)+(?P<Filter>[a-z ]+)`
+	RegexFindOptionsValue = `(?:-options)(?:\s)+(?P<Filter>[a-z]+)`
 )
 
 func getTypeFromString(input string) string {
@@ -35,7 +35,7 @@ func getOptionsFromString(input string) models.Options {
 	var durationParamInSeconds int
 	var params = getParamsFromString(input)
 	var options models.Options
-	var filters []string
+	var filter string
 
 	reValue := regexp.MustCompile(RegexFindParamsValue)
 
@@ -57,19 +57,24 @@ func getOptionsFromString(input string) models.Options {
 		}
 	}
 
-	filters = getFilterFromString(input)
+	filter = getFilterFromString(input)
 
 	options.DurationInSeconds = durationParamInSeconds
 	options.StartInSeconds = startParamInSeconds
-	options.Filters = filters
+	options.Filter = filter
 	return options
 }
 
-func getFilterFromString(input string) []string {
+func getFilterFromString(input string) string {
 	var regexFilter = regexp.MustCompile(RegexFindOptionsValue)
 	match := regexFilter.FindStringSubmatch(input)
 	filter := regexFilter.SubexpIndex("Filter")
-	return strings.Fields(match[filter])
+
+	if len(match) <= 0 {
+		return "none"
+	}
+	
+	return match[filter]
 }
 
 func ParseCommand(inputString string) models.DownloadQueueMessage {

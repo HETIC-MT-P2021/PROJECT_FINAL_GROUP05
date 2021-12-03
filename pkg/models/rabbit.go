@@ -25,7 +25,7 @@ type JobCheckerQueueMessage struct {
 type Options struct {
 	StartInSeconds    int      `json:"start"`
 	DurationInSeconds int      `json:"duration"`
-	Filters           []string `json:"filters"`
+	Filter            string   `json:"filters"`
 }
 
 type DiscordSession struct {

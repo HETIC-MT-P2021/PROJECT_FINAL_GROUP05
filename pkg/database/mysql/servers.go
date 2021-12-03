@@ -37,7 +37,8 @@ func (repo *mysqlServerRepo) CreateServer(server models.Server) error {
 	if _, err := stmt.Exec(
 		server.ServerID,
 		server.ServerName,
-		server.CreatedAt); err != nil {
+		server.CreatedAt,
+		server.UpdatedAt); err != nil {
 		return err
 	}
 
@@ -63,7 +64,8 @@ func (repo *mysqlServerRepo) GetServers() ([]models.Server, error) {
 			&server.ID,
 			&server.ServerID,
 			&server.ServerName,
-			&server.CreatedAt)
+			&server.CreatedAt,
+			&server.UpdatedAt)
 		if err != nil {
 			return []models.Server{}, err
 		}
@@ -87,6 +89,7 @@ func (repo *mysqlServerRepo) GetServer(serverID string) (*models.ServerCommandsA
       &server.ServerID,
       &server.ServerName,
       &server.CreatedAt,
+      &server.UpdatedAt,
     )
   }
 

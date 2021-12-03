@@ -6,4 +6,6 @@ type Media struct {
   IsArchived 	bool	 `json:"is_archived"`
   UserID 			string `json:"user_id"`
   ServerID 		string `json:"server_id"`
+  CreatedAt 		string 		`json:"created_at"`
+  UpdatedAt 		string 		`json:"updated_at"`
 }

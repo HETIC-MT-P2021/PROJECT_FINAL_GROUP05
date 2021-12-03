@@ -5,14 +5,17 @@ CREATE TABLE IF NOT EXISTS command (
     title VARCHAR(255) NOT NULL,
     command VARCHAR(255) NOT NULL,
     is_active BOOLEAN NOT NULL,
-    server_id VARCHAR(100) NOT NULL
+    server_id VARCHAR(100) NOT NULL,
+    created_at DATE NOT NULL,
+    updated_at DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS srv (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     server_id VARCHAR(100) NOT NULL UNIQUE,
     server_name VARCHAR(255) NOT NULL,
-    created_at DATE NOT NULL
+    created_at DATE NOT NULL,
+    updated_at DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS media (
@@ -20,7 +23,9 @@ CREATE TABLE IF NOT EXISTS media (
     discord_url VARCHAR(255) NOT NULL,
     is_archived BOOLEAN NOT NULL,
     user_id VARCHAR(255) NOT NULL,
-    server_id VARCHAR(100) NOT NULL
+    server_id VARCHAR(100) NOT NULL,
+    created_at DATE NOT NULL,
+    updated_at DATE NOT NULL
 );
 
 ALTER TABLE command 

@@ -18,7 +18,7 @@ var AllowedExtensions = map[string]string {
 }
 
 func CreateMedia(fileExtension string, stream io.ReadCloser) (error, string) {
-	path := os.Getenv("DOCKER_CONTAINER_PATH")
+	path := fmt.Sprintf("%sdownloads/", os.Getenv("BASE_DIR_IN_CONTAINER"))
 	if len(path) <= 0 {
 		return errors.New("Path not found"), ""
 	}

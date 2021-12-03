@@ -2,14 +2,15 @@ package query
 
 const (
 	QUERY_CREATE_SERVER string = `
-		INSERT INTO srv(server_id, server_name, created_at) VALUES(?, ?, ?);
+		INSERT INTO srv(server_id, server_name, created_at, updated_at) 
+		VALUES(?, ?, ?, ?);
 	`
 	QUERY_FIND_SERVERS string = `
-		SELECT id, server_id, server_name, created_at
+		SELECT id, server_id, server_name, created_at, updated_at
 		FROM srv;
 	`
 	QUERY_FIND_SERVER string = `
-		SELECT id, server_id, server_name, created_at
+		SELECT id, server_id, server_name, created_at, updated_at
 		FROM srv
 		WHERE server_id = ?;
 	`
