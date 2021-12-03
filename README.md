@@ -47,6 +47,19 @@ Go in [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/i
 
 ## Features 📘 (incoming)
 
+Extract a media from video or audio, which starts at X and ends at Y
+Extract the audio track from a video, which starts at X and which ends at Y
+Add a border to your discord avatar
+Add a watermark to a picture
+Reverse audio
+Convert an image to a gif, adding a filter
+
+Filters available (Lightning, Glitch, Rain, disco, 
+- fadebegin (Fade to black at the start), 
+- fadeend (Fade to black at the end), 
+- fadeboth (Fade to black at the start and at the end), 
+- carlos (it just posts a gif by Carlos) 😍)
+
 ## Main Libraries 📚 (incoming)
 
 - [Go-Swagger](https://github.com/go-swagger/go-swagger)
